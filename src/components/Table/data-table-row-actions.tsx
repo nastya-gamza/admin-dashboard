@@ -1,7 +1,7 @@
 import { Row } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
 import { useDeleteCustomerMutation } from '@/redux';
-import { Customer } from '@/types';
+import { Customer } from '@/lib/types';
 import { AlertDialogDemo } from './AlertDialogDemo';
 
 interface DataTableRowActionsProps<TData extends Customer> {

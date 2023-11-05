@@ -5,6 +5,7 @@ import { Customers } from './pages/Customers';
 import { Products } from './pages/Products';
 import { Orders } from './pages/Orders';
 import Login from './pages/Login';
+import { CreateCustomer } from './pages/CreateCustomer';
 
 export const App = () => {
   return (
@@ -12,6 +13,7 @@ export const App = () => {
       <Route path='/' element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path='customers' element={<Customers />} />
+        <Route path='customers/new' element={<CreateCustomer />} />
         <Route path='products' element={<Products />} />
         <Route path='orders' element={<Orders />} />
         <Route path='login' element={<Login />} />

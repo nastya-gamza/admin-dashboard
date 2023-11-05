@@ -30,7 +30,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { useState } from 'react';
-import { getExcelTable } from '@/utils/getExcelTable';
+import { getExcelTable } from '@/handlers/getExcelTable';
+// import { useAddCustomerMutation } from '@/redux';
+// import { AddCustomerForm } from '../Form/AddCustomerForm';
+import { Link } from 'react-router-dom';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -73,8 +76,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </div>
 
         <div>
+          {/*Add new*/}
+          <Link to='/customers/new'><Button className='mr-3 text-white'>
+            Add new
+          </Button></Link>
           {/*Excel*/}
-          <Button className='mr-3' onClick={() => getExcelTable()}>
+          <Button className='mr-3 text-white' onClick={() => getExcelTable()}>
             Download Excel
           </Button>
 
@@ -104,7 +111,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           </DropdownMenu>
         </div>
       </div>
-      
+
       {/* Table */}
       <div className='rounded-md border'>
         <Table>

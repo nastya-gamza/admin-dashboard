@@ -70,9 +70,7 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+
   @font-face {
     font-family: Satoshi;
     font-weight: 700;
@@ -110,11 +108,20 @@
 
   html {
     font-family: Satoshi, sistem-ui, sans-serif;
+    height: 100%;
+    background-color: #F1F5F9;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body {
+    height: 100%;
+    background-color: #F1F5F9;
   }
 }
 
-@layer components {
+/* @layer components {
   #app {
-    @apply h-screen flex flex-col dark:bg-neutral-700 dark:text-slate-100;
+    @apply h-full bg-whiten flex flex-col dark:bg-neutral-700 dark:text-slate-100;
   }
-}
+} */

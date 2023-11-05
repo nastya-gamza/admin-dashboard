@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Customer } from '@/types';
+import { Customer } from '@/lib/types';
 import { DataTableRowActions } from './data-table-row-actions';
 
 export const columns: ColumnDef<Customer>[] = [
