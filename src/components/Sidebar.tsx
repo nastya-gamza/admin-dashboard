@@ -23,8 +23,8 @@ export const Sidebar = ({isOpen}: {isOpen: boolean}) => {
     <aside
       className={`${
         isOpen ? 'w-72' : 'w-20'
-      } transition-all duration-[0.3s] ease-[ease] fixed top-0 left-0 z-50 h-screen bg-boxdark p-6 pt-9`}>
-      <Link to='/' className='flex items-center gap-2 transition-all duration-[0.3s] ease-[ease]'>
+      } transition-all duration-300 ease-in-out fixed top-0 left-0 z-50 h-screen bg-boxdark p-6 pt-9`}>
+      <Link to='/' className='flex items-center gap-2 transition-all duration-300 ease-in-out'>
         <img src={logo} alt='logo' />
         <h1
           className={`origin-left text-3xl text-white font-medium duration-200 ${

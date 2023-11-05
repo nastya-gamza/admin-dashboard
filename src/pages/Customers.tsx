@@ -1,22 +1,11 @@
-import { Customer, columns } from "@/components/Table/columns"
-import { DataTable } from "@/components/Table/dataTable"
-import { useEffect, useState } from "react"
+import { columns } from '@/components/Table/columns';
+import { DataTable } from '@/components/Table/dataTable';
+import { useGetCustomersQuery } from '@/redux';
 
 export const Customers = () => {
+  const { data, isLoading } = useGetCustomersQuery('');
 
-  const [data, setData] = useState<Customer[]>([
-    ]);
+  if (isLoading) return <h1>Loading...</h1>;
 
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(resp => resp.json())
-      .then(data => setData(data))
-      .catch(err => console.error('Не удалось загрузить посты: ', err))
-  }, []);
-
-  return (
-    <section >
-        <DataTable columns={columns} data={data} />
-    </section>
-  )
-}
+  return <section>{data && <DataTable columns={columns} data={data} />}</section>;
+};

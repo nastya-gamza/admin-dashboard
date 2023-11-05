@@ -9,7 +9,7 @@ export const MainLayout = () => {
   return (
     <div className='flex dark:bg-boxdark-2 h-full'>
       <Sidebar isOpen={isOpen}/>
-      <div className={`${isOpen ? 'w-open left-72' : 'w-close left-20'} text-black relative transition-all duration-[0.3s] ease-[ease] dark:text-white`}>
+      <div className={`${isOpen ? 'w-open left-72' : 'w-close left-20'} text-black relative transition-all duration-300 ease-in-out dark:text-white`}>
         <Header isOpen={isOpen} setIsOpen={setIsOpen} />
         <main className='p-7 h-full bg-whiten dark:bg-boxdark-2'>
           <Outlet />
