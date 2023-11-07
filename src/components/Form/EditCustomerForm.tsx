@@ -3,34 +3,51 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useAddCustomerMutation } from '@/redux';
+import { useUpdateCustomerMutation } from '@/redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TCustomerSchema, customerSchema } from '@/lib/types';
 import { X } from 'lucide-react';
 
-export const AddCustomerForm = () => {
+interface Row {
+  id: number,
+  name: string,
+  email: string, 
+  phone: string,
+  location: string
+}
+
+export const EditCustomerForm = ({id, name, email, phone, location}: Row) => {
   const form = useForm<TCustomerSchema>({
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      location: '',
+      name,
+      email,
+      phone,
+      location,
     },
     resolver: zodResolver(customerSchema),
     mode: 'onTouched'
   });
-  
-  const { register, handleSubmit, formState, reset } = form;
-  const { errors, isDirty, isValid, isSubmitting, isSubmitSuccessful } = formState;
+
+  const { register, handleSubmit, formState, reset, getValues } = form;
+  const { errors, isValid, isSubmitting, isSubmitSuccessful } = formState;
 
   const navigate = useNavigate();
 
-  const [addCustomer] = useAddCustomerMutation();
+  const [updateCustomer] = useUpdateCustomerMutation();
 
-  const onSubmit = async (data: TCustomerSchema) => {
-    await addCustomer(data).unwrap();
-    navigate('/customers')
+  const onSubmit = async () => {
+    const updatedCustomer = {
+      id,
+      body: {
+        name: getValues().name,
+        email: getValues().email,
+        phone: getValues().phone,
+        location: getValues().location,
+      },
+    };
+    await updateCustomer(updatedCustomer).unwrap();
+    navigate('/customers');
   };
 
   const onError = (errors: FieldErrors<TCustomerSchema>) => {
@@ -64,7 +81,7 @@ export const AddCustomerForm = () => {
           <Input id='location' className="col-span-4" {...register('location')} />
           <p className="text-xs text-danger col-span-5 text-center">{errors.location?.message}</p>
         </div>
-        <Button disabled={!isDirty || !isValid || isSubmitting} className='mt-4 text-white'>Add</Button>
+        <Button disabled={!isValid || isSubmitting} className='mt-4 text-white'>Edit</Button>
       </form>
   );
 };
