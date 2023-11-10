@@ -22,17 +22,9 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
 import { useState } from 'react';
 import { getExcelTable } from '@/handlers/getExcelTable';
-// import { useAddCustomerMutation } from '@/redux';
-// import { AddCustomerForm } from '../Form/AddCustomerForm';
 import { Link } from 'react-router-dom';
 
 interface DataTableProps<TData, TValue> {
@@ -62,6 +54,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     },
   });
 
+  const next = () => {
+    console.log(table.getState().pagination);
+    
+    table.nextPage()
+  }
+
   return (
     <>
       <div className='flex items-center justify-between gap-8'>
@@ -84,31 +82,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           <Button className='mr-3 text-white' onClick={() => getExcelTable()}>
             Download Excel
           </Button>
-
-          {/* Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline' className='ml-auto'>
-                Columns
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              {table
-                .getAllColumns()
-                .filter(column => column.getCanHide())
-                .map(column => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className='capitalize'
-                      checked={column.getIsVisible()}
-                      onCheckedChange={value => column.toggleVisibility(!!value)}>
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
 
@@ -164,7 +137,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <Button
           variant='outline'
           size='sm'
-          onClick={() => table.nextPage()}
+          onClick={() => next()}
           disabled={!table.getCanNextPage()}>
           Next
         </Button>
