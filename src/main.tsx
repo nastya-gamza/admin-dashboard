@@ -6,6 +6,7 @@ import { App } from './App.tsx';
 import './css/style.css';
 import { ThemeProvider } from './context/theme/themeProvider.tsx';
 import { store } from './redux';
+import './firebase.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

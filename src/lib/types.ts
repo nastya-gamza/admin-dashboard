@@ -16,3 +16,10 @@ export const customerSchema = z.object({
 });
 
 export type TCustomerSchema = z.infer<typeof customerSchema>;
+
+export const loginUserSchema = z.object({
+  email: z.string().min(1, {message: 'Email is required.'}).email('Email format is not valid'),
+  password:  z.string().min(6, {message: 'Password must be at least 6 characters.'}),
+});
+
+export type TLoginUserSchema = z.infer<typeof loginUserSchema>;

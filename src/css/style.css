@@ -119,9 +119,3 @@
     background-color: #F1F5F9;
   }
 }
-
-/* @layer components {
-  #app {
-    @apply h-full bg-whiten flex flex-col dark:bg-neutral-700 dark:text-slate-100;
-  }
-} */

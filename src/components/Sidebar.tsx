@@ -28,7 +28,7 @@ export const Sidebar = ({isOpen}: {isOpen: boolean}) => {
         <img src={logo} alt='logo' />
         <h1
           className={`origin-left text-3xl text-white font-medium duration-200 ${
-            !isOpen && 'opacity-0'
+            !isOpen && 'scale-0'
           }`}>
           TailAdmin
         </h1>
