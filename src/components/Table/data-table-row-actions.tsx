@@ -21,8 +21,8 @@ export function DataTableRowActions<TData extends Customer>({
 
   const navigate = useNavigate();
 
-  const handleEditCustomer = (id: number, name: string, email: string, phone: string, location: string) => {
-    navigate(`/customers/edit?id=${id}&name=${name}&email=${email}&phone=${phone}&location=${location}`);
+  const handleEditCustomer = (id: number) => {
+    navigate(`/customers/edit/${id}`);
   };
 
   return (
@@ -32,10 +32,10 @@ export function DataTableRowActions<TData extends Customer>({
         onClick={() =>
           handleEditCustomer(
             row.original.id,
-            row.original.name,
-            row.original.email,
-            row.original.phone,
-            row.original.location,
+            // row.original.name,
+            // row.original.email,
+            // row.original.phone,
+            // row.original.location,
           )
         }>
         <Pencil size={20} strokeWidth={1.25} />
