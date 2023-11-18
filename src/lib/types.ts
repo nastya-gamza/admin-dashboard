@@ -23,3 +23,29 @@ export const loginUserSchema = z.object({
 });
 
 export type TLoginUserSchema = z.infer<typeof loginUserSchema>;
+
+export interface TCalendar {
+  id?: string,
+  title: string,
+  start: string,
+  end: string,
+}
+
+export const calendarSchema = z.object({
+  title: z.string().refine((value) => value.trim().length > 0, {
+    message: 'Please fill in the title.',
+  }),
+  start: z.string().min(1, { message: 'Please enter start time.' }),
+  end: z.string().min(1, { message: 'Please enter end time.' }),
+}).refine(({ start, end }) => {
+  if (!start || !end) return true;
+
+  const startTime = Date.parse(`2023-01-01T${start}`);
+  const endTime = Date.parse(`2023-01-01T${end}`);
+
+  return startTime < endTime;
+}, {
+  message: 'Start time must be before end time.',
+});
+
+export type TCalendarSchema = z.infer<typeof calendarSchema>;

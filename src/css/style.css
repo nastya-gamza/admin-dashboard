@@ -152,3 +152,24 @@
     background-color: #F1F5F9;
   }
 }
+
+.fc-col-header,
+.fc-daygrid-body,
+.fc-scrollgrid-sync-table,
+.fc-timegrid-body, 
+.fc-timegrid-body table {
+    width: 100% !important;
+}
+
+.fc .fc-daygrid-day-frame {
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.fc .fc-daygrid-day-frame:hover {
+  background-color: var(--fc-neutral-bg-color);
+}
+
+canvas {
+    width: 100% !important;
+}

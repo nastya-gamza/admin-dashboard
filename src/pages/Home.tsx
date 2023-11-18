@@ -1,5 +1,10 @@
 import { CircleDollarSign, PackageSearch, ShoppingCart, Users2 } from 'lucide-react';
 import { DashboardCard } from '@/components/DashboardCard';
+import { GroupBarChart } from '@/components/Charts/GroupBarChart';
+import { BarChart } from '@/components/Charts/BarChart';
+import { DoughnutChart } from '@/components/Charts/DoughnutChart';
+import { LineChart } from '@/components/Charts/LineChart';
+import { ChartCard } from '@/components/ChartCard';
 
 export const Home = () => {
   const dashboardCards = [
@@ -10,10 +15,54 @@ export const Home = () => {
   ];
 
   return (
-    <div className='grid grid-cols-auto-fit grid-cols-layout gap-6 mt-8'>
-      {dashboardCards.map(({ title, icon, number, fluctuation }) => (
-        <DashboardCard key={title} title={title} icon={icon} number={number} fluctuation={fluctuation} />
-      ))}
-    </div>
+    <>
+      <section className='grid items-stretch lg:grid-cols-4 grid-cols-2 gap-6 md:gap-4 mt-2 h-full'>
+        {dashboardCards.map(({ title, icon, number, fluctuation }) => (
+          <DashboardCard
+            key={title}
+            title={title}
+            icon={icon}
+            number={number}
+            fluctuation={fluctuation}
+          />
+        ))}
+        <div className='col-span-2'>
+          <ChartCard>
+            <h3 className='mb-3 text-center'>Budget vs Costs</h3>
+            <GroupBarChart />
+          </ChartCard>
+        </div>
+        <div className='col-span-2'>
+          <ChartCard>MAP</ChartCard>
+        </div>
+        <div>
+          <ChartCard>
+            <h3 className='mb-7 text-center'>Top 5 products</h3>
+            <DoughnutChart />
+          </ChartCard>
+        </div>
+        <div>
+          <ChartCard>Customers</ChartCard>
+        </div>
+        <div className='col-span-2'>
+          <ChartCard>
+            <h3 className='mb-3 text-center'>Total sales</h3>
+            <LineChart />
+          </ChartCard>
+        </div>
+        <div className='col-span-2'>
+          <ChartCard>
+            <h3 className='mb-3 text-center'>Revenue</h3>
+            <BarChart />
+          </ChartCard>
+        </div>
+        <div className='col-span-2'>
+          <ChartCard>
+            <h3 className='mb-3 text-center'>Revenue</h3>
+            <BarChart />
+          </ChartCard>
+        </div>
+      </section>
+    </>
   );
 };

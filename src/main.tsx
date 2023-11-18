@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <ThemeProvider>
         <BrowserRouter>
-          <App/>
+          <App />
         </BrowserRouter>
       </ThemeProvider>
     </Provider>

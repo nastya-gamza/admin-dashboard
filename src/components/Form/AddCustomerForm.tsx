@@ -18,9 +18,9 @@ export const AddCustomerForm = () => {
       location: '',
     },
     resolver: zodResolver(customerSchema),
-    mode: 'onTouched'
+    mode: 'onTouched',
   });
-  
+
   const { register, handleSubmit, formState, reset } = form;
   const { errors, isDirty, isValid, isSubmitting, isSubmitSuccessful } = formState;
 
@@ -30,11 +30,11 @@ export const AddCustomerForm = () => {
 
   const onSubmit = async (data: TCustomerSchema) => {
     await addCustomer(data).unwrap();
-    navigate('/customers')
+    navigate('/customers');
   };
 
   const onError = (errors: FieldErrors<TCustomerSchema>) => {
-    console.log(errors)
+    console.log(errors);
   };
 
   useEffect(() => {
@@ -42,29 +42,47 @@ export const AddCustomerForm = () => {
   }, [isSubmitSuccessful, reset]);
 
   return (
-      <form onSubmit={handleSubmit(onSubmit, onError)} className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full' noValidate>
-        <button onClick={ ()=>navigate('/customers') } type='button' className='absolute right-3 top-3'><X size={20} /></button>
-        <div className='grid grid-cols-5 items-center gap-2'>
-          <Label htmlFor='name' className='text-center'>Name:</Label>
-          <Input id='name' className="col-span-4" {...register('name')} />
-          <p className="text-xs text-danger col-span-5 text-center">{errors.name?.message}</p>
-        </div>
-        <div className='grid grid-cols-5 items-center gap-4'>
-          <Label htmlFor='email' className='text-center'>Email:</Label>
-          <Input type='email' id='email' className="col-span-4" {...register('email')} />
-          <p className="text-xs text-danger col-span-5 text-center">{errors.email?.message}</p>
-        </div>
-        <div className='grid grid-cols-5 items-center gap-4'>
-          <Label htmlFor='phone' className='text-center'>Phone:</Label>
-          <Input id='phone' className="col-span-4" {...register('phone')} />
-          <p className="text-xs text-danger col-span-5 text-center">{errors.phone?.message}</p>
-        </div>
-        <div className='grid grid-cols-5 items-center gap-4'>
-          <Label htmlFor='location' className='text-center'>Location:</Label>
-          <Input id='location' className="col-span-4" {...register('location')} />
-          <p className="text-xs text-danger col-span-5 text-center">{errors.location?.message}</p>
-        </div>
-        <Button disabled={!isDirty || !isValid || isSubmitting} className='mt-4 text-white'>Add</Button>
-      </form>
+    <form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
+      noValidate>
+      <button
+        onClick={() => navigate('/customers')}
+        type='button'
+        className='absolute right-3 top-3'>
+        <X size={20} />
+      </button>
+      <div className='grid grid-cols-5 items-center gap-2'>
+        <Label htmlFor='name' className='text-center'>
+          Name:
+        </Label>
+        <Input id='name' className='col-span-4' {...register('name')} />
+        <p className='text-xs text-danger col-span-5 text-center'>{errors.name?.message}</p>
+      </div>
+      <div className='grid grid-cols-5 items-center gap-4'>
+        <Label htmlFor='email' className='text-center'>
+          Email:
+        </Label>
+        <Input type='email' id='email' className='col-span-4' {...register('email')} />
+        <p className='text-xs text-danger col-span-5 text-center'>{errors.email?.message}</p>
+      </div>
+      <div className='grid grid-cols-5 items-center gap-4'>
+        <Label htmlFor='phone' className='text-center'>
+          Phone:
+        </Label>
+        <Input id='phone' className='col-span-4' {...register('phone')} />
+        <p className='text-xs text-danger col-span-5 text-center'>{errors.phone?.message}</p>
+      </div>
+      <div className='grid grid-cols-5 items-center gap-4'>
+        <Label htmlFor='location' className='text-center'>
+          Location:
+        </Label>
+        <Input id='location' className='col-span-4' {...register('location')} />
+        <p className='text-xs text-danger col-span-5 text-center'>{errors.location?.message}</p>
+      </div>
+      <Button disabled={!isDirty || !isValid || isSubmitting} className='mt-4 text-white'>
+        Add
+      </Button>
+    </form>
   );
 };

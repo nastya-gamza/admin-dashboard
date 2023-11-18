@@ -11,13 +11,13 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 
-interface AlertDialogDemoProps {
-  action: JSX.Element;
+interface PopupWindowProps {
+  action?: JSX.Element;
   text: string;
   onClick: () => void;
 }
 
-export function AlertDialogDemo({ action, text, onClick }: AlertDialogDemoProps) {
+export function PopupWindow({ action, text, onClick }: PopupWindowProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>

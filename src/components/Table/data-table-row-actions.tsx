@@ -2,7 +2,7 @@ import { Row } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useDeleteCustomerMutation } from '@/redux';
 import { Customer } from '@/lib/types';
-import { AlertDialogDemo } from './AlertDialogDemo';
+import { PopupWindow } from '../PopupWindow';
 import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,15 +32,11 @@ export function DataTableRowActions<TData extends Customer>({
         onClick={() =>
           handleEditCustomer(
             row.original.id,
-            // row.original.name,
-            // row.original.email,
-            // row.original.phone,
-            // row.original.location,
           )
         }>
         <Pencil size={20} strokeWidth={1.25} />
       </Button>
-      <AlertDialogDemo
+      <PopupWindow
         action={<Trash2 size={20} strokeWidth={1.25} />}
         onClick={() => handleDeleteCustomer(row.original.id)}
         text='This will permanently delete selected customer.'
