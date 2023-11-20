@@ -5,6 +5,7 @@ import { BarChart } from '@/components/Charts/BarChart';
 import { DoughnutChart } from '@/components/Charts/DoughnutChart';
 import { LineChart } from '@/components/Charts/LineChart';
 import { ChartCard } from '@/components/ChartCard';
+import { MapChart } from '@/components/Charts/MapChart';
 
 export const Home = () => {
   const dashboardCards = [
@@ -28,37 +29,42 @@ export const Home = () => {
         ))}
         <div className='col-span-2'>
           <ChartCard>
-            <h3 className='mb-3 text-center'>Budget vs Costs</h3>
+            <h3 className='font-bold mb-3 text-center'>Budget vs Costs</h3>
             <GroupBarChart />
           </ChartCard>
         </div>
         <div className='col-span-2'>
-          <ChartCard>MAP</ChartCard>
+          <ChartCard>
+            <h3 className='font-bold text-center'>Customer location</h3>
+            <MapChart/>
+          </ChartCard>
         </div>
         <div>
           <ChartCard>
-            <h3 className='mb-7 text-center'>Top 5 products</h3>
+            <h3 className='font-bold mb-7 text-center'>Top 5 products</h3>
             <DoughnutChart />
           </ChartCard>
         </div>
         <div>
-          <ChartCard>Customers</ChartCard>
+          <ChartCard>
+            <h3 className='font-bold mb-7 text-center'>Last orders</h3>
+            </ChartCard>
         </div>
         <div className='col-span-2'>
           <ChartCard>
-            <h3 className='mb-3 text-center'>Total sales</h3>
+            <h3 className='font-bold mb-3 text-center'>Total sales</h3>
             <LineChart />
           </ChartCard>
         </div>
         <div className='col-span-2'>
           <ChartCard>
-            <h3 className='mb-3 text-center'>Revenue</h3>
+            <h3 className='font-bold mb-3 text-center'>Revenue</h3>
             <BarChart />
           </ChartCard>
         </div>
         <div className='col-span-2'>
           <ChartCard>
-            <h3 className='mb-3 text-center'>Revenue</h3>
+            <h3 className='font-bold mb-3 text-center'>Revenue</h3>
             <BarChart />
           </ChartCard>
         </div>
