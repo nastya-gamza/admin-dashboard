@@ -7,16 +7,17 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useRef, useState } from 'react';
 import { CalendarForm } from '../Form/CalendarForm';
 import { TCalendar } from '@/lib/types';
-import { PopupWindow } from '../PopupWindow';
+import { ModalWindow } from '../ModalWindow';
 
 export const Calendar = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showAddEventForm, setShowAddEventForm] = useState(false);
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
   const [currentEvents, setCurrentEvents] = useLocalStorage<EventInput[]>('events', []);
   const calendarRef = useRef<FullCalendar>(null);
+  const [deleteEvent, setDeleteEvent] = useState('');
 
   const handleDateClick = () => {
-    setShowModal(true);
+    setShowAddEventForm(true);
   };
 
   let clickedDate = '';
@@ -34,16 +35,26 @@ export const Calendar = () => {
     };
 
     setCurrentEvents([...currentEvents, newEvent]);
-    setShowModal(false);
+    setShowAddEventForm(false);
   };
 
   const handleEventClick = (selected: EventClickArg) => {
-    setShowDeleteWarning(true)
-    if (window.confirm(`Are you sure you want to delete the event '${selected.event.title}'`)) {
-      selected.event.remove();
-      const updatedEvents = currentEvents.filter(event => event.id !== selected.event.id);
+    setShowDeleteWarning(true);
+    setDeleteEvent(selected.event.id);
+  };
+
+  const handleDelete = () => {
+    if (deleteEvent) {
+      const updatedEvents = currentEvents.filter(event => event.id !== deleteEvent);
       setCurrentEvents(updatedEvents);
     }
+    setShowDeleteWarning(false);
+    setDeleteEvent('');
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteWarning(false);
+    setDeleteEvent('');
   };
 
   return (
@@ -73,23 +84,23 @@ export const Calendar = () => {
         dateClick={dateClick}
         displayEventEnd={true}
       />
-      {showModal && (
-        <div className='fixed inset-0 z-50 bg-background/40 backdrop-blur-sm'>
+      {showAddEventForm && (
+        <div className='fixed inset-0 z-50 bg-background/50 backdrop-blur-sm'>
           <CalendarForm
             calendarRef={calendarRef}
             handleEvent={handleEvent}
-            setShowModal={setShowModal}
+            setShowModal={setShowAddEventForm}
           />
         </div>
       )}
-      {
-        showDeleteWarning && (
-        <PopupWindow
-        onClick={() => ('')}
-        text='This will permanently delete selected event from your calendar.'
-      />
-        )
-      }
+      {showDeleteWarning && (
+        <ModalWindow
+          handleClose={setShowDeleteWarning}
+          handleDelete={handleDelete}
+          handleCancelDelete={handleCancelDelete}
+          text='This will permanently delete selected event from your calendar.'
+        />
+      )}
     </>
   );
 };

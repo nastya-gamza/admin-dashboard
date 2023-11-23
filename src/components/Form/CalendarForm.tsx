@@ -3,11 +3,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { TCalendar, calendarSchema } from '@/lib/types';
 import { EventInput } from '@fullcalendar/core/index.js';
 import FullCalendar from '@fullcalendar/react';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 interface CalendarFormProps {
   calendarRef: React.RefObject<FullCalendar>;
@@ -24,7 +25,7 @@ interface CalendarFormProps {
   >;
 }
 
-export const CalendarForm = ({ handleEvent, setShowModal }: CalendarFormProps) => {
+export const CalendarForm = ({ handleEvent, setShowModal}: CalendarFormProps) => {
   const form = useForm({
     defaultValues: {
       title: '',
@@ -49,8 +50,15 @@ export const CalendarForm = ({ handleEvent, setShowModal }: CalendarFormProps) =
     endTime &&
     Date.parse(`2023-01-01T${startTime}`) < Date.parse(`2023-01-01T${endTime}`);
 
+    const formRef = useRef<HTMLFormElement>(null);
+  
+    useClickOutside(formRef, () => {
+      setShowModal(false);
+    });
+
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit(handleEvent)}
       className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-5 border bg-background p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
       noValidate>
@@ -59,7 +67,7 @@ export const CalendarForm = ({ handleEvent, setShowModal }: CalendarFormProps) =
       </button>
       <div className='relative grid grid-cols-6 items-center'>
         <Label htmlFor='name' className='text-center col-span-1'>
-          Title:
+          Title <span className='text-danger'>*</span>
         </Label>
         <Input id='name' className='col-span-5' {...register('title')} />
         <p className='absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-danger text-center pt-1'>
@@ -69,7 +77,7 @@ export const CalendarForm = ({ handleEvent, setShowModal }: CalendarFormProps) =
       <div className='flex gap-10 relative'>
         <div className='flex-1 text-center relative'>
           <Label htmlFor='start' className='text-center'>
-            Start time:
+            Start time <span className='text-danger'>*</span>
           </Label>
           <Input type='time' id='start' {...register('start')} />
           <p className='absolute left-1/2 -translate-x-1/2 text-xs text-danger pt-1'>
@@ -78,7 +86,7 @@ export const CalendarForm = ({ handleEvent, setShowModal }: CalendarFormProps) =
         </div>
         <div className='flex-1 text-center relative'>
           <Label htmlFor='end' className='text-center'>
-            End time:
+            End time <span className='text-danger'>*</span>
           </Label>
           <Input type='time' id='end' {...register('end')} />
           <p className='absolute left-1/2 -translate-x-1/2 text-xs text-danger pt-1'>
@@ -87,7 +95,7 @@ export const CalendarForm = ({ handleEvent, setShowModal }: CalendarFormProps) =
         </div>
         {dirtyFields.start && dirtyFields.end && !isStartTimeValid && (
           <p className='text-xs text-danger absolute -bottom-6 left-1/2 -translate-x-1/2'>
-            Start time must be before end time.
+            Start time must be less than end time.
           </p>
         )}
       </div>

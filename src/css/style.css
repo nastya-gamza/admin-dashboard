@@ -170,6 +170,10 @@
   background-color: var(--fc-neutral-bg-color);
 }
 
+.fc .fc-popover {
+  z-index: 20;
+}
+
 canvas {
     width: 100% !important;
 }
