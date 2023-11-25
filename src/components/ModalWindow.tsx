@@ -26,7 +26,7 @@ export const ModalWindow = ({ text, handleDelete, handleCancelDelete, handleClos
   };
 
   return (
-    <div className='fixed inset-0 z-50 bg-background/50 backdrop-blur-sm'>
+    <div className='fixed inset-0 z-50 bg-background/50 backdrop-blur-sm text-left'>
       <div ref={modalRef} className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-3 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg md:w-full'>
         <h3 className='text-lg font-semibold'>Are you absolutely sure?</h3>
         <p className='text-sm text-muted-foreground'>{text}</p>

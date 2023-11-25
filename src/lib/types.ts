@@ -8,14 +8,46 @@ export interface Customer {
   location: string;
 }
 
+export interface Product {
+  id: number;
+  imgUrl: string;
+  title: string;
+  quantity: number;
+  price: number;
+  color: string;
+  producer: string;
+  inStock: boolean;
+  orders: number;
+}
+
+export interface Order {
+  id: number;
+  imgUrl: string;
+  product: string;
+  customer: number;
+  date: string;
+  quantity: number;
+  status: string;
+}
+
 export const customerSchema = z.object({
-  name: z.string().min(1, {message: 'Username must be at least 2 characters.'}),
+  name: z.string().min(2, {message: 'Username must be at least 2 characters.'}),
   email: z.string().min(1, {message: 'Email is required.'}).email('Email format is not valid'),
   phone: z.string().min(7, {message: 'Phone must be at least 7 characters.'}),
   location: z.string().min(1, {message: 'Location is required.'}),
 });
 
 export type TCustomerSchema = z.infer<typeof customerSchema>;
+
+export const productSchema = z.object({
+  title: z.string().min(1, {message: 'Please enter product title.'}),
+  quantity: z.string().min(1, {message: 'Please enter product quantity.'}),
+  price: z.string().min(1, {message: 'Please enter product price.'}),
+  producer: z.string().min(1, {message: 'Please enter product producer.'}),
+  color: z.string().min(1, {message: 'Please enter product color.'}),
+});
+
+export type TProductSchema = z.infer<typeof productSchema>;
 
 export const loginUserSchema = z.object({
   email: z.string().min(1, {message: 'Email is required.'}).email('Email format is not valid'),

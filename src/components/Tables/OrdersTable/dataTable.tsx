@@ -66,16 +66,16 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         {/* Input */}
         <div className='flex items-center py-4'>
           <Input
-            placeholder='Filter emails...'
-            value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-            onChange={event => table.getColumn('email')?.setFilterValue(event.target.value)}
+            placeholder='Filter products...'
+            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+            onChange={event => table.getColumn('title')?.setFilterValue(event.target.value)}
             className='max-w-sm'
           />
         </div>
 
         <div>
           {/*Add new*/}
-          <Link to='/customers/new'><Button className='mr-3 text-white'>
+          <Link to='/products/new'><Button className='mr-3 text-white'>
             Add new
           </Button></Link>
           {/*Excel*/}
@@ -93,7 +93,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className='text-center font-semibold'>
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
@@ -108,7 +108,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className='text-center'>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}

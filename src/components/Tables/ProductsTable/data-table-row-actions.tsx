@@ -1,31 +1,31 @@
 import { Row } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
-import { useDeleteCustomerMutation } from '@/redux';
-import { Customer } from '@/lib/types';
-import { Button } from '../ui/button';
+import { useDeleteProductMutation } from '@/redux';
+import { Product } from '@/lib/types';
+import { Button } from '../../ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { ModalWindow } from '../ModalWindow';
+import { ModalWindow } from '../../ModalWindow';
 
-interface DataTableRowActionsProps<TData extends Customer> {
+interface DataTableRowActionsProps<TData extends Product> {
   row: Row<TData>;
 }
 
-export function DataTableRowActions<TData extends Customer>({
+export function DataTableRowActions<TData extends Product>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
-  const [deleteCustomer] = useDeleteCustomerMutation();
+  const [deleteProduct] = useDeleteProductMutation();
 
-  const handleDeleteCustomer = async (id: number) => {
-    await deleteCustomer(id).unwrap();
+  const handleDeleteProduct = async (id: number) => {
+    await deleteProduct(id).unwrap();
     setShowDeleteWarning(false);
   };
 
   const navigate = useNavigate();
 
-  const handleEditCustomer = (id: number) => {
-    navigate(`/customers/edit/${id}`);
+  const handleEditProduct = (id: number) => {
+    navigate(`/products/edit/${id}`);
   };
 
   const handleCancelDelete = () => {
@@ -34,7 +34,7 @@ export function DataTableRowActions<TData extends Customer>({
 
   return (
     <>
-      <Button variant='ghost' onClick={() => handleEditCustomer(row.original.id)}>
+      <Button variant='ghost' onClick={() => handleEditProduct(row.original.id)}>
         <Pencil size={20} strokeWidth={1.25} />
       </Button>
       <Button variant='ghost' onClick={() => setShowDeleteWarning(true)}>
@@ -44,9 +44,9 @@ export function DataTableRowActions<TData extends Customer>({
         <ModalWindow
           id={row.original.id}
           handleClose={setShowDeleteWarning}
-          handleDeleteRow={handleDeleteCustomer}
+          handleDeleteRow={handleDeleteProduct}
           handleCancelDelete={handleCancelDelete}
-          text='This will permanently delete selected customer.'
+          text='This will permanently delete selected product.'
         />
       )}
     </>

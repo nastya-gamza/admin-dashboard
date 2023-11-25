@@ -2,7 +2,7 @@ import { CircleDollarSign, PackageSearch, ShoppingCart, Users2 } from 'lucide-re
 import { DashboardCard } from '@/components/DashboardCard';
 import { GroupBarChart } from '@/components/Charts/GroupBarChart';
 import { BarChart } from '@/components/Charts/BarChart';
-import { DoughnutChart } from '@/components/Charts/DoughnutChart';
+// import { DoughnutChart } from '@/components/Charts/DoughnutChart';
 import { LineChart } from '@/components/Charts/LineChart';
 import { ChartCard } from '@/components/ChartCard';
 import { MapChart } from '@/components/Charts/MapChart';
@@ -42,7 +42,7 @@ export const Home = () => {
         <div>
           <ChartCard>
             <h3 className='font-bold mb-7 text-center'>Top 5 products</h3>
-            <DoughnutChart />
+            {/* <DoughnutChart /> */}
           </ChartCard>
         </div>
         <div>

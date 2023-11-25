@@ -10,6 +10,8 @@ import { EditCustomer } from './pages/EditCustomer';
 import { SignUp } from './pages/SignUp';
 import { PrivateRoute } from './pages/Private';
 import { CalendarPage } from './pages/CalendarPage';
+import { CreateProduct } from './pages/CreateProduct';
+import { EditProduct } from './pages/EditProduct';
 
 export const App = () => {
   return (
@@ -21,6 +23,8 @@ export const App = () => {
           <Route path='customers/new' element={<CreateCustomer />} />
           <Route path='customers/edit/:id' element={<EditCustomer />} />
           <Route path='products' element={<Products />} />
+          <Route path='products/new' element={<CreateProduct />} />
+          <Route path='products/edit/:id' element={<EditProduct />} />
           <Route path='orders' element={<Orders />} />
           <Route path='/calendar' element={<CalendarPage />} />
         </Route>

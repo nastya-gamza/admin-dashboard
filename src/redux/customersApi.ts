@@ -8,7 +8,7 @@ export const customersApi = createApi({
   endpoints: build => ({
     getCustomers: build.query<Customer[], string>({
       query: () => `customers`,
-      providesTags: (result) =>
+      providesTags: result =>
         result
           ? [
               ...result.map(({ id }) => ({ type: 'Customers' as const, id })),
@@ -34,15 +34,20 @@ export const customersApi = createApi({
       }),
       invalidatesTags: [{ type: 'Customers', id: 'LIST' }],
     }),
-    
+
     deleteCustomer: build.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `customers/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: [{ type: 'Customers', id: 'LIST' }],
-    })
+    }),
   }),
 });
 
-export const { useGetCustomersQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation } = customersApi;
+export const {
+  useGetCustomersQuery,
+  useAddCustomerMutation,
+  useUpdateCustomerMutation,
+  useDeleteCustomerMutation,
+} = customersApi;
