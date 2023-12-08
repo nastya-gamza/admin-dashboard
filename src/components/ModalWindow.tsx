@@ -5,10 +5,10 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 interface ModalWindow {
   handleClose: (value: React.SetStateAction<boolean>) => void;
   handleDelete?: () => void;
-  handleDeleteRow?: (id: number) => void;
+  handleDeleteRow?: (id: string) => void;
   handleCancelDelete: () => void;
   text: string;
-  id?: number; 
+  id?: string; 
 }
 
 export const ModalWindow = ({ text, handleDelete, handleCancelDelete, handleClose, handleDeleteRow, id }: ModalWindow) => {

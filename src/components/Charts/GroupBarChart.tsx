@@ -28,7 +28,7 @@ interface ChartData {
 export const GroupBarChart = () => {
   const [budget, setBudget] = useState<ChartData[]>([])
   const [costs, setCosts] = useState<ChartData[]>([])
-  const baseUrl = "http://localhost:3000/";
+  const baseUrl = "http://localhost:5000/";
 
   useEffect(()=> {
     const fetchData = async () => {

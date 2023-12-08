@@ -6,6 +6,7 @@ import { BarChart } from '@/components/Charts/BarChart';
 import { LineChart } from '@/components/Charts/LineChart';
 import { ChartCard } from '@/components/ChartCard';
 import { MapChart } from '@/components/Charts/MapChart';
+import { LineChartTwo } from '@/components/Charts/LineChartTwo';
 
 export const Home = () => {
   const dashboardCards = [
@@ -58,8 +59,8 @@ export const Home = () => {
         </div>
         <div className='col-span-2'>
           <ChartCard>
-            <h3 className='font-bold mb-3 text-center'>Revenue</h3>
-            <BarChart />
+            <h3 className='font-bold mb-3 text-center'>Costs vs Revenue</h3>
+            <LineChartTwo />
           </ChartCard>
         </div>
         <div className='col-span-2'>

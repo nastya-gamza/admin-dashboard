@@ -21,7 +21,7 @@ interface Revenue {
 
 export const BarChart = () => {
   const [chart, setChart] = useState<Revenue[]>([]);
-  const baseUrl = 'http://localhost:3000/revenue';
+  const baseUrl = 'http://localhost:5000/revenue';
 
   useEffect(() => {
     const fetchData = async () => {

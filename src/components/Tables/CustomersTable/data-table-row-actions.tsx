@@ -17,14 +17,14 @@ export function DataTableRowActions<TData extends Customer>({
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
   const [deleteCustomer] = useDeleteCustomerMutation();
 
-  const handleDeleteCustomer = async (id: number) => {
+  const handleDeleteCustomer = async (id: string) => {
     await deleteCustomer(id).unwrap();
     setShowDeleteWarning(false);
   };
 
   const navigate = useNavigate();
 
-  const handleEditCustomer = (id: number) => {
+  const handleEditCustomer = (id: string) => {
     navigate(`/customers/edit/${id}`);
   };
 
@@ -34,7 +34,7 @@ export function DataTableRowActions<TData extends Customer>({
 
   return (
     <>
-      <Button variant='ghost' onClick={() => handleEditCustomer(row.original.id)}>
+      <Button variant='ghost' onClick={() => handleEditCustomer(row.original._id)}>
         <Pencil size={20} strokeWidth={1.25} />
       </Button>
       <Button variant='ghost' onClick={() => setShowDeleteWarning(true)}>
@@ -42,7 +42,7 @@ export function DataTableRowActions<TData extends Customer>({
       </Button>
       {showDeleteWarning && (
         <ModalWindow
-          id={row.original.id}
+          id={row.original._id}
           handleClose={setShowDeleteWarning}
           handleDeleteRow={handleDeleteCustomer}
           handleCancelDelete={handleCancelDelete}

@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { customersApi } from './customersApi';
 import { productsApi } from './productsApi';
 import { ordersApi } from './ordersApi';
+import { countriesApi } from './countriesApi';
 import { userReducer } from './userSlice';
 
 const rootReducer = combineReducers({
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
   [customersApi.reducerPath]: customersApi.reducer,
   [productsApi.reducerPath]: productsApi.reducer,
   [ordersApi.reducerPath]: ordersApi.reducer,
+  [countriesApi.reducerPath]: countriesApi.reducer,
 });
 
 export const store = configureStore({
@@ -18,6 +20,7 @@ export const store = configureStore({
       customersApi.middleware,
       productsApi.middleware,
       ordersApi.middleware,
+      countriesApi.middleware,
     ),
 });
 

@@ -3,7 +3,7 @@ import { Product } from '@/lib/types';
 
 export const productsApi = createApi({
   reducerPath: 'productsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
   tagTypes: ['Products'],
   endpoints: build => ({
     getProducts: build.query<Product[], string>({
@@ -11,7 +11,7 @@ export const productsApi = createApi({
       providesTags: result =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Products' as const, id })),
+              ...result.map(({ _id }) => ({ type: 'Products' as const, _id })),
               { type: 'Products', id: 'LIST' },
             ]
           : [{ type: 'Products', id: 'LIST' }],

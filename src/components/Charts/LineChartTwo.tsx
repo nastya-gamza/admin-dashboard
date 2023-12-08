@@ -24,15 +24,18 @@ interface ChartData {
   amount: string;
 }
 
-export const LineChart = () => {
-  const [sales, setSales] = useState<ChartData[]>([]);
-  const baseUrl = 'http://localhost:5000/sales';
+export const LineChartTwo = () => {
+  const [revenue, setRevenue] = useState<ChartData[]>([]);
+  const [costs, setCosts] = useState<ChartData[]>([]);
+  const baseUrl = 'http://localhost:5000/';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(baseUrl);
-        setSales(data);
+        const { data } = await axios.get(`${baseUrl}revenue`);
+        const latestData = data.slice(0, 6);
+        console.log(data)
+        setRevenue(latestData);
       } catch (err) {
         console.log(err);
       }
@@ -40,13 +43,30 @@ export const LineChart = () => {
     fetchData();
   }, []);
 
+  useEffect(()=> {
+    const fetchData = async () => {
+      try {
+        const {data} = await axios.get(`${baseUrl}costs`);
+        setCosts(data)
+      } catch (err) {
+        console.log(err);
+      }
+    } 
+    fetchData();
+  }, []);
+
   const data = {
-    labels: sales.map(i => i.month),
+    labels: revenue.map(i => i.month),
     datasets: [
       {
-        label: 'Sales',
-        lineTension: 0.5,
-        data: sales.map(i => i.amount),
+        label: 'Revenue',
+        data: revenue.map(i => i.amount),
+        borderColor: '#3C50E0',
+        backgroundColor: '#3C50E0',
+      },
+      {
+        label: 'Costs',
+        data: costs.map(i => i.amount),
         borderColor: '#80CAEE',
         backgroundColor: '#80CAEE',
       },
@@ -74,5 +94,5 @@ export const LineChart = () => {
     },
   };
 
-  return sales.length ? <Line options={options} data={data} /> : null;
+  return revenue.length&&costs.length ? <Line options={options} data={data} /> : null;
 };

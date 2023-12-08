@@ -3,15 +3,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useAddProductMutation } from '@/redux';
+import { useAddOrderMutation } from '@/redux';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TProductSchema, productSchema } from '@/lib/types';
 import { X } from 'lucide-react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
-export const AddProductForm = () => {
+export const AddOrderForm = () => {
   const form = useForm<TProductSchema>({
+    defaultValues: {
+      title: '',
+      quantity: '',
+      price: '',
+      producer: '',
+      color: '',
+    },
     resolver: zodResolver(productSchema),
     mode: 'onTouched',
   });
@@ -21,10 +28,10 @@ export const AddProductForm = () => {
 
   const navigate = useNavigate();
 
-  const [addProduct] = useAddProductMutation();
+  const [addOrder] = useAddOrderMutation();
 
   const onSubmit = async (data: TProductSchema) => {
-    await addProduct(data).unwrap();
+    await addOrder(data).unwrap();
     navigate('/products');
   };
 

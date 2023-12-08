@@ -12,6 +12,9 @@ import { PrivateRoute } from './pages/Private';
 import { CalendarPage } from './pages/CalendarPage';
 import { CreateProduct } from './pages/CreateProduct';
 import { EditProduct } from './pages/EditProduct';
+import { EditOrder } from './pages/EditOrder';
+import { CreateOrder } from './pages/CreateOrder';
+import NotFound from './pages/NotFound';
 
 export const App = () => {
   return (
@@ -26,7 +29,10 @@ export const App = () => {
           <Route path='products/new' element={<CreateProduct />} />
           <Route path='products/edit/:id' element={<EditProduct />} />
           <Route path='orders' element={<Orders />} />
+          <Route path='products/new' element={<CreateOrder />} />
+          <Route path='products/edit/:id' element={<EditOrder />} />
           <Route path='/calendar' element={<CalendarPage />} />
+          <Route path='*' element={<NotFound />} />
         </Route>
       </Route>
         <Route path='login' element={<Login />} />

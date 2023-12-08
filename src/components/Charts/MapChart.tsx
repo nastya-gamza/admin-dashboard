@@ -5,9 +5,9 @@ import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simp
 const geoUrl = 'https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json';
 
 export const MapChart = () => {
-  const {data} = useGetCustomersQuery('');
+  const { data } = useGetCustomersQuery('');
   const countriesToHighlight = [...new Set(data?.map(i => i.location))];
-  
+
   const getColor = (countryName: string) => {
     return countriesToHighlight.includes(countryName) ? '#3056D3' : '#A9BDFF';
   };
@@ -20,13 +20,13 @@ export const MapChart = () => {
   const [position, setPosition] = useState<Position>({ coordinates: [0, 0], zoom: 1 });
 
   const handleMoveEnd = (position: Position) => {
-    setPosition(position)
-  }
+    setPosition(position);
+  };
 
   return (
     <ComposableMap
       className='h-[325px] w-full'
-      projectionConfig={{ rotate: [-50, 0, 0], scale: 200 }}>
+      projectionConfig={{ rotate: [-50, 0, 0], scale: 220 }}>
       <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMoveEnd}>
         <Geographies geography={geoUrl}>
           {({ geographies }) =>

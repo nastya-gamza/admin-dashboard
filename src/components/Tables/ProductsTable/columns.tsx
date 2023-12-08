@@ -3,19 +3,19 @@ import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/lib/types';
 import { DataTableRowActions } from './data-table-row-actions';
-import { useGetProductsQuery } from '@/redux';
+// import { useGetProductsQuery } from '@/redux';
 
 export const columns: ColumnDef<Product>[] = [
-  {
-    accessorKey: 'id',
-    header: 'Id',
-  },
-  {
-    header: 'Image',
-    cell: ({ row }) => {
-      return <img src={row.original.imgUrl} alt='Product Image' className='inline h-12' />;
-    },
-  },
+  // {
+  //   accessorKey: '_id',
+  //   header: 'Id',
+  // },
+  // {
+  //   header: 'Image',
+  //   cell: ({ row }) => {
+  //     return <img src={row.original.img} height={48} alt='Product Image' className='inline h-12' />;
+  //   },
+  // },
   {
     accessorKey: 'title',
     header: ({ column }) => {
@@ -60,15 +60,15 @@ export const columns: ColumnDef<Product>[] = [
   },
 ];
 
-export const ColumnsWithImage = () => {
-  const { data: products = [] } = useGetProductsQuery('');
+// export const ColumnsWithImage = () => {
+//   const { data: products = [] } = useGetProductsQuery('');
 
-  if (products.length > 0) {
-    columns[1].cell = ({ row }) => {
-      const product = products.find(p => p.id === row.original.id);
-      return <img src={product!.imgUrl} alt='Product Image' className='inline h-12' />;
-    };
-  }
+//   if (products.length > 0) {
+//     columns[1].cell = ({ row }) => {
+//       const product = products.find(p => p._id === row.original._id);
+//       return <img src={product!.img} height={48} alt='Product Image' className='inline h-12' />;
+//     };
+//   }
 
-  return columns;
-};
+//   return columns;
+// };

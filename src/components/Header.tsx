@@ -1,6 +1,6 @@
 import { AlignJustify } from 'lucide-react';
 import { DarkModeSwitcher } from './DarkModeSwitcher';
-import avatar from '/img/avatar.png';
+import avatar from '/icons/avatar.svg';
 import { Dispatch, SetStateAction } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import {
@@ -31,7 +31,7 @@ export const Header = ({
   }
 
   return (
-    <header className='flex items-center gap-6 h-16 sticky top-0 left-0 z-40 bg-white px-4 shadow-sm dark:bg-boxdark'>
+    <header className='flex items-center gap-6 h-16 sticky top-0 left-0 z-40 bg-white px-6 shadow-sm dark:bg-boxdark'>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className='hover:bg-bodydark1 rounded-full p-2 duration-300 dark:hover:bg-dark'>
@@ -40,7 +40,7 @@ export const Header = ({
         </div>
       </button>
       <div className='flex w-full mr-auto justify-end items-center'>
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-2 mt-1'>
           <DarkModeSwitcher />
           <div className='text-right mr-3'>
             <div className='text-sm font-medium'>{email.split('@')[0]}</div>
@@ -49,7 +49,7 @@ export const Header = ({
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger className='focus-visible:outline-none'>
-                <img src={avatar}></img>
+                <img src={avatar} width={40} height={40}></img>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='mr-5'>
                 <DropdownMenuLabel className='grid'>Profile <span className='text-xs text-gray font-thin'>{email}</span></DropdownMenuLabel>

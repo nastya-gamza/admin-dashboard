@@ -6,7 +6,7 @@ import { DataTableRowActions } from './data-table-row-actions';
 
 export const columns: ColumnDef<Customer>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: '_id',
     header: 'Id',
   },
   {

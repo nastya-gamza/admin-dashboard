@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export interface Customer {
-  id: number;
+  _id: string;
   name: string;
   email: string;
   phone: string;
@@ -9,8 +9,8 @@ export interface Customer {
 }
 
 export interface Product {
-  id: number;
-  imgUrl: string;
+  _id: string;
+  img: string;
   title: string;
   quantity: number;
   price: number;
@@ -22,32 +22,50 @@ export interface Product {
 
 export interface Order {
   id: number;
-  imgUrl: string;
+  img: string;
   product: string;
-  customer: number;
+  customer: string;
   date: string;
   quantity: number;
   status: string;
 }
 
+export interface Country {
+  ISO3: string,
+  name: string,
+  region: string
+}
+
 export const customerSchema = z.object({
-  name: z.string().min(2, {message: 'Username must be at least 2 characters.'}),
-  email: z.string().min(1, {message: 'Email is required.'}).email('Email format is not valid'),
-  phone: z.string().min(7, {message: 'Phone must be at least 7 characters.'}),
-  location: z.string().min(1, {message: 'Location is required.'}),
+  name: z.string().trim().min(2, {message: 'Username must be at least 2 characters.'}),
+  email: z.string().trim().min(1, {message: 'Email is required.'}).email('Email format is not valid'),
+  phone: z.coerce.number(),
+  location: z.string().optional(),
 });
 
 export type TCustomerSchema = z.infer<typeof customerSchema>;
 
 export const productSchema = z.object({
-  title: z.string().min(1, {message: 'Please enter product title.'}),
-  quantity: z.string().min(1, {message: 'Please enter product quantity.'}),
-  price: z.string().min(1, {message: 'Please enter product price.'}),
-  producer: z.string().min(1, {message: 'Please enter product producer.'}),
-  color: z.string().min(1, {message: 'Please enter product color.'}),
+  title: z.string().trim().min(1, {message: 'Please enter product title.'}),
+  quantity: z.coerce.number(),
+  // price: z.number({required_error: 'Please enter product price.'}).min(0),
+  // price: z.string().trim().min(1, {message: 'Please enter product price.'}),
+  price: z.coerce.number(),
+  producer: z.string().trim().min(1, {message: 'Please enter product producer.'}),
+  color: z.string().trim().min(1, {message: 'Please enter product color.'}),
 });
 
 export type TProductSchema = z.infer<typeof productSchema>;
+
+export const orderSchema = z.object({
+  product: z.string().trim().min(1, {message: 'Please enter product.'}),
+  customer: z.string().trim().min(1, {message: 'Please enter product title.'}),
+  date: z.string().trim().min(1, {message: 'Please enter product title.'}),
+  quantity: z.string().trim().min(1, {message: 'Please enter product quantity.'}),
+  status: z.string().trim().min(1, {message: 'Please enter product producer.'}),
+});
+
+export type TOrderSchema = z.infer<typeof orderSchema>;
 
 export const loginUserSchema = z.object({
   email: z.string().min(1, {message: 'Email is required.'}).email('Email format is not valid'),
