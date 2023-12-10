@@ -36,6 +36,19 @@ export interface Country {
   region: string
 }
 
+export interface ExcelData {
+  _id: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  title?: string;
+  quantity?: number;
+  price?: number;
+  color?: string;
+  producer?: string;
+}
+
 export const customerSchema = z.object({
   name: z.string().trim().min(2, {message: 'Username must be at least 2 characters.'}),
   email: z.string().trim().min(1, {message: 'Email is required.'}).email('Email format is not valid'),
@@ -48,8 +61,6 @@ export type TCustomerSchema = z.infer<typeof customerSchema>;
 export const productSchema = z.object({
   title: z.string().trim().min(1, {message: 'Please enter product title.'}),
   quantity: z.coerce.number(),
-  // price: z.number({required_error: 'Please enter product price.'}).min(0),
-  // price: z.string().trim().min(1, {message: 'Please enter product price.'}),
   price: z.coerce.number(),
   producer: z.string().trim().min(1, {message: 'Please enter product producer.'}),
   color: z.string().trim().min(1, {message: 'Please enter product color.'}),

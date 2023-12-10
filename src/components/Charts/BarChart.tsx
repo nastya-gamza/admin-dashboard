@@ -67,5 +67,15 @@ export const BarChart = () => {
     },
   };
 
-  return chart.length ? <Bar options={options} data={data} /> : null;
+  return chart.length ? (
+    <>
+      <Bar options={options} data={data} />
+      <div className='flex flex-wrap gap-x-4 gap-y-1 justify-center mt-6'>
+        <div className='flex items-center gap-1 text-xs'>
+          <div className={`w-3 h-3 rounded-full bg-[#3C50E0]`}></div>
+          Revenue
+        </div>
+      </div>
+    </>
+  ) : null;
 };

@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { getExcelTable } from '@/handlers/getExcelTable';
 import { Link } from 'react-router-dom';
+import { useGetProductsQuery } from '@/redux';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,6 +37,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const { data: products } = useGetProductsQuery('');
 
   const table = useReactTable({
     data,
@@ -56,9 +58,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   const next = () => {
     console.log(table.getState().pagination);
-    
-    table.nextPage()
-  }
+
+    table.nextPage();
+  };
 
   return (
     <>
@@ -75,13 +77,15 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
         <div>
           {/*Add new*/}
-          <Link to='/products/new'><Button className='mr-3 text-white'>
-            Add new
-          </Button></Link>
+          <Link to='/products/new'>
+            <Button className='mr-3 text-white'>Add new</Button>
+          </Link>
           {/*Excel*/}
-          <Button className='mr-3 text-white' onClick={() => getExcelTable()}>
-            Download Excel
-          </Button>
+          {products && (
+            <Button className='mr-3 text-white' onClick={() => getExcelTable(products)}>
+              Download Excel
+            </Button>
+          )}
         </div>
       </div>
 

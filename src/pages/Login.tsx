@@ -40,7 +40,9 @@ export const Login = () => {
       </div>
       <main className='flex items-center justify-center h-screen dark:bg-boxdark-2 dark:text-white'>
         {loading ? (
-          <LoadingSpinner />
+          <div className='fixed left-2/4 top-2/4 z-50'>
+            <LoadingSpinner />
+          </div>
         ) : (
           <>
             <div className='flex flex-col items-center justify-center border-r-2 border-stroke dark:border-gray h-full w-1/2 px-4'>

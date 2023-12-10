@@ -6,14 +6,13 @@ import { Doughnut } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Products {
-  id: number;
-  name: string;
-  orders: string;
+  title: string;
+  sales: number;
 }
 
 export const DoughnutChart = () => {
   const [products, setProducts] = useState<Products[]>([]);
-  const baseUrl = 'http://localhost:3000/products';
+  const baseUrl = 'http://localhost:5000/topProducts';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,18 +27,12 @@ export const DoughnutChart = () => {
   }, []);
 
   const data = {
-    labels: products.map(i => i.name),
+    labels: products.map(i => i.title),
     datasets: [
       {
-        label: 'Orders',
-        data: products.map(i => i.orders),
-        backgroundColor: [
-          '#3C50E0',
-          '#6577F3',
-          '#80CAEE',
-          '#0FADCF',
-          '#A9BDFF',
-        ],
+        label: 'Sales',
+        data: products.map(i => i.sales),
+        backgroundColor: ['#3C50E0', '#6577F3', '#80CAEE', '#0FADCF', '#A9BDFF'],
       },
     ],
   };
@@ -49,9 +42,25 @@ export const DoughnutChart = () => {
     plugins: {
       legend: {
         display: false,
-      },   
+      },
     },
   };
 
-  return products.length ? <Doughnut options={options} data={data} /> : null;
+  const colors = ['bg-primary', 'bg-[#6577F3]', 'bg-[#80CAEE]', 'bg-[#0FADCF]', 'bg-[#A9BDFF]'];
+
+  return (
+    products.length && (
+      <>
+        <Doughnut options={options} data={data} />
+        <div className='flex flex-wrap gap-x-4 gap-y-1 justify-center mt-4'>
+          {products.map((el, i) => (
+            <div key={i} className='flex items-center gap-1 text-xs'>
+              <div className={`w-3 h-3 rounded-full ${colors[i]}`}></div>
+              {el.title}
+            </div>
+          ))}
+        </div>
+      </>
+    )
+  );
 };

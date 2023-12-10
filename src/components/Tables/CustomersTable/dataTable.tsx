@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { getExcelTable } from '@/handlers/getExcelTable';
 import { Link } from 'react-router-dom';
+import { useGetCustomersQuery } from '@/redux';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,6 +37,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const {data: customer} = useGetCustomersQuery('')
 
   const table = useReactTable({
     data,
@@ -79,9 +81,11 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             Add new
           </Button></Link>
           {/*Excel*/}
-          <Button className='mr-3 text-white' onClick={() => getExcelTable()}>
+          {customer && 
+          <Button className='mr-3 text-white' onClick={() => getExcelTable(customer)}>
             Download Excel
           </Button>
+          }
         </div>
       </div>
 

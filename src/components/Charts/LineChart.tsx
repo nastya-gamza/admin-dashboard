@@ -1,23 +1,18 @@
 import axios from 'axios';
-import { Chart as ChartJS, CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend, } from 'chart.js';
-import { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(
+import {
+  Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
   Title,
   Tooltip,
-  Legend
-);
+  Legend,
+} from 'chart.js';
+import { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface ChartData {
   month: string;
@@ -74,5 +69,15 @@ export const LineChart = () => {
     },
   };
 
-  return sales.length ? <Line options={options} data={data} /> : null;
+  return sales.length ? (
+    <>
+      <Line options={options} data={data} />
+      <div className='flex flex-wrap gap-x-4 gap-y-1 justify-center mt-6'>
+        <div className='flex items-center gap-1 text-xs'>
+          <div className={`w-3 h-3 rounded-full bg-[#80CAEE]`}></div>
+          Sales
+        </div>
+      </div>
+    </>
+  ) : null;
 };

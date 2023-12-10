@@ -1,25 +1,22 @@
+import { ExcelData } from '@/lib/types';
 import xlsx, { IJsonSheet } from 'json-as-xlsx';
 
-export const getExcelTable = () => {
+export const getExcelTable = (data: ExcelData[]) => {
+  const firstItemKeys = Object.keys(data[0]).filter(i => i !== '__v');
   const columns: IJsonSheet[] = [
     {
       sheet: 'Dashboard Info',
-      columns: [
-        { label: 'Id', value: 'id' },
-        { label: 'Name', value: 'name' },
-        { label: 'Email', value: 'email' },
-        { label: 'Phone', value: 'phone' },
-      ],
-      content: [
-        { id: 1, name: 'Leanne', email: 'Sincere@april.biz', phone: '1-770-736-8031' },
-        { id: 2, name: 'Ervin Howell', email: 'Shanna@melissa.tv', phone: '90566-7771' },
-      ],
+      columns: firstItemKeys.map(key => ({
+        label: key,
+        value: key,
+      })),
+      content: data.map(item => ({...item})),
     },
   ];
 
   const settings = {
-    fileName: "MySpreadsheet"
-  }
+    fileName: 'Dashboard Info',
+  };
 
-  xlsx(columns, settings)
+  xlsx(columns, settings);
 };

@@ -150,7 +150,9 @@ export const AddCustomerForm = () => {
           </Button>
         </form>
       ) : (
-        <LoadingSpinner />
+        <div className='fixed left-2/4 top-2/4 z-50'>
+          <LoadingSpinner />
+        </div>
       )}
     </>
   );

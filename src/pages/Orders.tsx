@@ -6,9 +6,12 @@ import { useGetOrdersQuery } from '@/redux';
 export const Orders = () => {
   const { data, isLoading } = useGetOrdersQuery('');
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading)
+    return (
+      <div className='fixed left-2/4 top-2/4 z-50'>
+        <LoadingSpinner />
+      </div>
+    );
 
   return <section>{data && <DataTable columns={columns} data={data} />}</section>;
 };
-
- 

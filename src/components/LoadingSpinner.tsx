@@ -1,6 +1,6 @@
 export const LoadingSpinner = () => {
   return (
-    <div className='fixed left-2/4 top-2/4 z-50'>
+    // <div className='fixed left-2/4 top-2/4 z-50'>
       <div className="flex text-center">
         <svg
           aria-hidden='true'
@@ -19,6 +19,6 @@ export const LoadingSpinner = () => {
         </svg>
         <span className=''>Loading...</span>
       </div>
-    </div>
+    // </div>
   );
 };
