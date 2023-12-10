@@ -22,7 +22,8 @@ export const columns: ColumnDef<Product>[] = [
       return (
         <Button
           variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className='text-[16px]'>
           Title
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
@@ -49,9 +50,13 @@ export const columns: ColumnDef<Product>[] = [
     header: 'In Stoke',
     cell: ({ row }) =>
       row.original.quantity > 0 ? (
-        <p className='bg-green-300 rounded-lg'>Yes</p>
+        <span className='inline-block rounded  py-1 px-3 font-medium text-meta-3 bg-meta-3/[0.08] '>
+          Yes
+        </span>
       ) : (
-        <p className='bg-red-300 rounded-lg'>No</p>
+        <span className='inline-block rounded  py-1 px-3 font-medium text-meta-1 bg-meta-1/[0.08] '>
+          No
+        </span>
       ),
   },
   {

@@ -60,7 +60,7 @@ export const CalendarForm = ({ handleEvent, setShowModal}: CalendarFormProps) =>
     <form
       ref={formRef}
       onSubmit={handleSubmit(handleEvent)}
-      className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-5 border bg-background p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
+      className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-5 border bg-background dark:bg-boxdark p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
       noValidate>
       <button onClick={() => setShowModal(false)} type='button' className='absolute right-3 top-3'>
         <X size={20} />

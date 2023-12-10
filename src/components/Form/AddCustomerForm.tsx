@@ -27,7 +27,6 @@ export const AddCustomerForm = () => {
 
   const onSubmit = async (data: TCustomerSchema) => {
     await addCustomer(data).unwrap();
-    console.log(data);
     navigate('/customers');
   };
 
@@ -70,13 +69,18 @@ export const AddCustomerForm = () => {
     }
   };
 
+  const themeColor = JSON.parse(localStorage.getItem('theme') as string);
+  const selectBackgroundColor = themeColor === 'dark' ? '#1A222C' : '#fff';
+  const selectBorderColor = themeColor === 'dark' ? '#1A222C' : 'rgb(226, 232, 240)';
+  const selectTextColor = themeColor === 'dark' ? '#fff' : 'rgb(33, 43, 54)';
+
   return (
     <>
       {data ? (
         <form
           ref={formRef}
           onSubmit={handleSubmit(onSubmit, onError)}
-          className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-8 border bg-background p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
+          className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-8 border dark:bg-boxdark p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
           noValidate>
           <button
             onClick={() => navigate('/customers')}
@@ -122,7 +126,8 @@ export const AddCustomerForm = () => {
                   styles={{
                     control: baseStyles => ({
                       ...baseStyles,
-                      borderColor: 'rgb(226, 232, 240)',
+                      backgroundColor: selectBackgroundColor,
+                      borderColor: selectBorderColor,
                       padding: '1px',
                       boxShadow: 'none',
                       borderRadius: '6px',
@@ -132,6 +137,23 @@ export const AddCustomerForm = () => {
                       '&:hover': {
                         borderColor: 'none',
                       },
+                    }),
+                    singleValue: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                    }),
+                    option: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menu: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menuList: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
                     }),
                   }}
                   className='col-span-4 h-10'

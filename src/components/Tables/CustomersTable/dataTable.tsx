@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             placeholder='Filter emails...'
             value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={event => table.getColumn('email')?.setFilterValue(event.target.value)}
-            className='max-w-sm'
+            className='max-w-sm dark:bg-boxdark'
           />
         </div>
 
@@ -90,14 +90,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       </div>
 
       {/* Table */}
-      <div className='rounded-md border'>
+      <div className='rounded-sm border dark:bg-boxdark dark:border-strokedark'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <TableHead key={header.id} className='text-center font-semibold'>
+                    <TableHead key={header.id} className='text-center font-medium text-[16px] dark:text-whiten'>
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
@@ -107,7 +107,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className='dark:text-darktext'>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>

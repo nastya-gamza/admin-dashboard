@@ -12,13 +12,6 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 
 export const AddOrderForm = () => {
   const form = useForm<TProductSchema>({
-    defaultValues: {
-      title: '',
-      quantity: '',
-      price: '',
-      producer: '',
-      color: '',
-    },
     resolver: zodResolver(productSchema),
     mode: 'onTouched',
   });
@@ -53,7 +46,7 @@ export const AddOrderForm = () => {
     <form
       ref={formRef}
       onSubmit={handleSubmit(onSubmit, onError)}
-      className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
+      className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border dark:bg-boxdark p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
       noValidate>
       <button
         onClick={() => navigate('/products')}

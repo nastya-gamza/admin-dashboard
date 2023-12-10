@@ -36,7 +36,7 @@ export const ModalWindow = ({ text, handleDelete, handleCancelDelete, handleClos
             className='bg-background border border-input'>
             Cancel
           </Button>
-          <Button onClick={continueHandler}>Continue</Button>
+          <Button onClick={continueHandler} className='text-white'>Continue</Button>
         </div>
       </div>
     </div>
