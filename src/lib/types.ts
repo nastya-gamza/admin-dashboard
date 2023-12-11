@@ -21,8 +21,7 @@ export interface Product {
 }
 
 export interface Order {
-  id: number;
-  img: string;
+  _id: string;
   product: string;
   customer: string;
   date: string;
@@ -47,6 +46,10 @@ export interface ExcelData {
   price?: number;
   color?: string;
   producer?: string;
+  product?: string;
+  customer?: string;
+  date?: string;
+  status?: string;
 }
 
 export const customerSchema = z.object({

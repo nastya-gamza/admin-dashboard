@@ -3,7 +3,7 @@ import { Order } from '@/lib/types';
 
 export const ordersApi = createApi({
   reducerPath: 'ordersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
   tagTypes: ['Orders'],
   endpoints: build => ({
     getOrders: build.query<Order[], string>({
@@ -11,7 +11,7 @@ export const ordersApi = createApi({
       providesTags: result =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Orders' as const, id })),
+              ...result.map(({ _id }) => ({ type: 'Orders' as const, _id })),
               { type: 'Orders', id: 'LIST' },
             ]
           : [{ type: 'Orders', id: 'LIST' }],

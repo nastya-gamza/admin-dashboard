@@ -1,34 +1,36 @@
-import { useForm, FieldErrors } from 'react-hook-form';
+import { useForm, FieldErrors, Controller } from 'react-hook-form';
+import AsyncSelect from 'react-select/async';
+import Select from 'react-select'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useAddOrderMutation } from '@/redux';
+import { useAddOrderMutation, useGetCustomersQuery, useGetProductsQuery } from '@/redux';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TProductSchema, productSchema } from '@/lib/types';
+import { Customer, Product, TOrderSchema, orderSchema } from '@/lib/types';
 import { X } from 'lucide-react';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 export const AddOrderForm = () => {
-  const form = useForm<TProductSchema>({
-    resolver: zodResolver(productSchema),
-    mode: 'onTouched',
+  const form = useForm<TOrderSchema>({
+    resolver: zodResolver(orderSchema),
   });
 
-  const { register, handleSubmit, formState, reset } = form;
-  const { errors, isDirty, isValid, isSubmitting, isSubmitSuccessful } = formState;
+  const { register, handleSubmit, formState, reset, control } = form;
+  const { errors, isDirty, isSubmitting, isSubmitSuccessful } = formState;
 
   const navigate = useNavigate();
 
   const [addOrder] = useAddOrderMutation();
 
-  const onSubmit = async (data: TProductSchema) => {
+  const onSubmit = async (data: TOrderSchema) => {
     await addOrder(data).unwrap();
-    navigate('/products');
+    navigate('/orders');
   };
 
-  const onError = (errors: FieldErrors<TProductSchema>) => {
+  const onError = (errors: FieldErrors<TOrderSchema>) => {
     console.log(errors);
   };
 
@@ -37,61 +39,279 @@ export const AddOrderForm = () => {
   }, [isSubmitSuccessful, reset]);
 
   const formRef = useRef<HTMLFormElement>(null);
-  
+
   useClickOutside(formRef, () => {
-    navigate('/products');
+    navigate('/orders');
   });
 
+  const { data: productsData } = useGetProductsQuery('');
+  const { data: customersData } = useGetCustomersQuery('');
+
+  interface ProductOption {
+    readonly value: string;
+    readonly label: string;
+  }
+
+  interface CustomerOption {
+    readonly value: string;
+    readonly label: string;
+  }
+
+  const filterProducts = (inputValue: string) => {
+    if (productsData) {
+      return productsData
+        .filter((product: Product) =>
+          product.title.toLowerCase().includes(inputValue.toLowerCase()),
+        )
+        .map((product: Product) => ({
+          label: product.title,
+          value: product.title,
+        }));
+    }
+    return [];
+  };
+
+  const filterCustomers = (inputValue: string) => {
+    if (customersData) {
+      return customersData
+        .filter((customer: Customer) =>
+          customer.name.toLowerCase().includes(inputValue.toLowerCase()),
+        )
+        .map((customer: Customer) => ({
+          label: customer.name,
+          value: customer.name,
+        }));
+    }
+    return [];
+  };
+
+  const loadOptions = (inputValue: string, callback: (options: ProductOption[]) => void) => {
+    if (productsData) {
+      callback(filterProducts(inputValue));
+    }
+  };
+
+  const loadOptionsCustomer = (
+    inputValue: string,
+    callback: (options: CustomerOption[]) => void,
+  ) => {
+    if (customersData) {
+      callback(filterCustomers(inputValue));
+    }
+  };
+
+  const statusOptions = [
+    { value: 'pending', label: 'Pending' },
+    { value: 'complete', label: 'Complete' },
+    { value: 'canceled', label: 'Canceled' }
+  ]
+
+  const themeColor = JSON.parse(localStorage.getItem('theme') as string);
+  const selectBackgroundColor = themeColor === 'dark' ? '#1A222C' : '#fff';
+  const selectBorderColor = themeColor === 'dark' ? '#1A222C' : 'rgb(226, 232, 240)';
+  const selectTextColor = themeColor === 'dark' ? '#fff' : 'rgb(33, 43, 54)';
+
   return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit(onSubmit, onError)}
-      className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border dark:bg-boxdark p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
-      noValidate>
-      <button
-        onClick={() => navigate('/products')}
-        type='button'
-        className='absolute right-3 top-3'>
-        <X size={20} />
-      </button>
-      <div className='grid grid-cols-5 items-center gap-2'>
-        <Label htmlFor='title' className='text-center'>
-          Title <span className='text-danger'>*</span>
-        </Label>
-        <Input id='title' className='col-span-4' {...register('title')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.title?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='quantity' className='text-center'>
-          Quantity <span className='text-danger'>*</span>
-        </Label>
-        <Input type='email' id='quantity' className='col-span-4' {...register('quantity')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.quantity?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='price' className='text-center'>
-          Price <span className='text-danger'>*</span>
-        </Label>
-        <Input id='price' className='col-span-4' {...register('price')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.price?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='producer' className='text-center'>
-            Producer <span className='text-danger'>*</span>
-        </Label>
-        <Input id='producer' className='col-span-4' {...register('producer')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.producer?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='color' className='text-center'>
-          Color <span className='text-danger'>*</span>
-        </Label>
-        <Input id='color' className='col-span-4' {...register('color')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.color?.message}</p>
-      </div>
-      <Button disabled={!isDirty || !isValid || isSubmitting} className='mt-4 text-white'>
-        Add
-      </Button>
-    </form>
+    <>
+      {productsData && customersData ? (
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit(onSubmit, onError)}
+          className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-8 border dark:bg-boxdark p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
+          noValidate>
+          <button
+            onClick={() => navigate('/orders')}
+            type='button'
+            className='absolute right-3 top-3'>
+            <X size={20} />
+          </button>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label htmlFor='date' className='text-center'>
+              Date <span className='text-danger'>*</span>
+            </Label>
+            <Input id='date' className='col-span-4' {...register('date')} />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.date?.message}
+            </p>
+          </div>
+          <div className='grid grid-cols-5 items-center gap-4'>
+            <Label className='text-center'>
+              Customer <span className='text-danger'>*</span>
+            </Label>
+            <Controller
+              control={control}
+              name='customer'
+              render={({ field: { onChange, onBlur } }) => (
+                <AsyncSelect
+                  id='customer'
+                  styles={{
+                    control: baseStyles => ({
+                      ...baseStyles,
+                      backgroundColor: selectBackgroundColor,
+                      borderColor: selectBorderColor,
+                      padding: '1px',
+                      boxShadow: 'none',
+                      borderRadius: '6px',
+                      '&:focus-within': {
+                        borderColor: 'black',
+                      },
+                      '&:hover': {
+                        borderColor: 'none',
+                      },
+                    }),
+                    singleValue: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                    }),
+                    option: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menu: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menuList: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                  }}
+                  className='col-span-4 h-10'
+                  cacheOptions
+                  onChange={selectedOption => onChange(selectedOption?.value || null)}
+                  onBlur={onBlur}
+                  loadOptions={loadOptionsCustomer}
+                  defaultOptions
+                  noOptionsMessage={() => 'Location is not found'}
+                />
+              )}
+            />
+          </div>
+          <div className='grid grid-cols-5 items-center gap-4'>
+            <Label className='text-center'>
+              Product <span className='text-danger'>*</span>
+            </Label>
+            <Controller
+              control={control}
+              name='product'
+              render={({ field: { onChange, onBlur } }) => (
+                <AsyncSelect
+                  id='product'
+                  styles={{
+                    control: baseStyles => ({
+                      ...baseStyles,
+                      backgroundColor: selectBackgroundColor,
+                      borderColor: selectBorderColor,
+                      padding: '1px',
+                      boxShadow: 'none',
+                      borderRadius: '6px',
+                      '&:focus-within': {
+                        borderColor: 'black',
+                      },
+                      '&:hover': {
+                        borderColor: 'none',
+                      },
+                    }),
+                    singleValue: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                    }),
+                    option: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menu: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menuList: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                  }}
+                  className='col-span-4 h-10'
+                  cacheOptions
+                  onChange={selectedOption => onChange(selectedOption?.value || null)}
+                  onBlur={onBlur}
+                  loadOptions={loadOptions}
+                  defaultOptions
+                  noOptionsMessage={() => 'Location is not found'}
+                />
+              )}
+            />
+          </div>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label htmlFor='quantity' className='text-center'>
+              Quantity <span className='text-danger'>*</span>
+            </Label>
+            <Input type='number' id='quantity' className='col-span-4' {...register('quantity')} />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.quantity?.message}
+            </p>
+          </div>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label htmlFor='status' className='text-center'>
+              Status <span className='text-danger'>*</span>
+            </Label>
+            <Controller
+              control={control}
+              name='status'
+              render={({ field: { onChange, onBlur } }) => (
+                <Select
+                  id='status'
+                  styles={{
+                    control: baseStyles => ({
+                      ...baseStyles,
+                      backgroundColor: selectBackgroundColor,
+                      borderColor: selectBorderColor,
+                      padding: '1px',
+                      boxShadow: 'none',
+                      borderRadius: '6px',
+                      '&:focus-within': {
+                        borderColor: 'black',
+                      },
+                      '&:hover': {
+                        borderColor: 'none',
+                      },
+                    }),
+                    singleValue: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                    }),
+                    option: provided => ({
+                      ...provided,
+                      color: selectTextColor,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menu: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                    menuList: provided => ({
+                      ...provided,
+                      backgroundColor: selectBackgroundColor,
+                    }),
+                  }}
+                  className='col-span-4 h-10'
+                  options={statusOptions}
+                  onChange={selectedOption => onChange(selectedOption?.value || null)}
+                  onBlur={onBlur}
+                  noOptionsMessage={() => 'Location is not found'}
+                />
+              )}
+            />
+          </div>
+          <Button disabled={!isDirty || isSubmitting} className='mt-4 text-white'>
+            Add
+          </Button>
+        </form>
+      ) : (
+        <div className='fixed left-2/4 top-2/4 z-50'>
+          <LoadingSpinner />
+        </div>
+      )}
+    </>
   );
 };

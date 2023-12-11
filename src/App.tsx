@@ -29,8 +29,8 @@ export const App = () => {
           <Route path='products/new' element={<CreateProduct />} />
           <Route path='products/edit/:id' element={<EditProduct />} />
           <Route path='orders' element={<Orders />} />
-          <Route path='products/new' element={<CreateOrder />} />
-          <Route path='products/edit/:id' element={<EditOrder />} />
+          <Route path='orders/new' element={<CreateOrder />} />
+          <Route path='orders/edit/:id' element={<EditOrder />} />
           <Route path='/calendar' element={<CalendarPage />} />
           <Route path='*' element={<NotFound />} />
         </Route>

@@ -6,7 +6,7 @@ import { DataTableRowActions } from './data-table-row-actions';
 
 export const columns: ColumnDef<Order>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: '_id',
     header: 'Id',
   },
   {
@@ -15,7 +15,8 @@ export const columns: ColumnDef<Order>[] = [
       return (
         <Button
           variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className='text-[16px]'>
           Product
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
@@ -28,7 +29,8 @@ export const columns: ColumnDef<Order>[] = [
       return (
         <Button
           variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className='text-[16px]'>
           Customer
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>

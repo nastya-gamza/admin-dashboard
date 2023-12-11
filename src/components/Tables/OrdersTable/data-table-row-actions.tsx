@@ -17,14 +17,14 @@ export function DataTableRowActions<TData extends Order>({
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
   const [deleteOrder] = useDeleteOrderMutation();
 
-  const handleDeleteOrder = async (id: number) => {
+  const handleDeleteOrder = async (id: string) => {
     await deleteOrder(id).unwrap();
     setShowDeleteWarning(false);
   };
 
   const navigate = useNavigate();
 
-  const handleEditOrder = (id: number) => {
+  const handleEditOrder = (id: string) => {
     navigate(`/orders/edit/${id}`);
   };
 
@@ -34,7 +34,7 @@ export function DataTableRowActions<TData extends Order>({
 
   return (
     <>
-      <Button variant='ghost' onClick={() => handleEditOrder(row.original.id)}>
+      <Button variant='ghost' onClick={() => handleEditOrder(row.original._id)}>
         <Pencil size={20} strokeWidth={1.25} />
       </Button>
       <Button variant='ghost' onClick={() => setShowDeleteWarning(true)}>
@@ -42,7 +42,7 @@ export function DataTableRowActions<TData extends Order>({
       </Button>
       {showDeleteWarning && (
         <ModalWindow
-          id={row.original.id}
+          id={row.original._id}
           handleClose={setShowDeleteWarning}
           handleDeleteRow={handleDeleteOrder}
           handleCancelDelete={handleCancelDelete}

@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { getExcelTable } from '@/handlers/getExcelTable';
 import { Link } from 'react-router-dom';
+import { useGetOrdersQuery } from '@/redux';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,6 +37,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const { data: orders } = useGetOrdersQuery('');
 
   const table = useReactTable({
     data,
@@ -56,9 +58,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   const next = () => {
     console.log(table.getState().pagination);
-    
-    table.nextPage()
-  }
+
+    table.nextPage();
+  };
 
   return (
     <>
@@ -66,34 +68,36 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         {/* Input */}
         <div className='flex items-center py-4'>
           <Input
-            placeholder='Filter products...'
-            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-            onChange={event => table.getColumn('title')?.setFilterValue(event.target.value)}
-            className='max-w-sm'
+            placeholder='Filter by products...'
+            value={(table.getColumn('product')?.getFilterValue() as string) ?? ''}
+            onChange={event => table.getColumn('product')?.setFilterValue(event.target.value)}
+            className='max-w-sm dark:bg-boxdark'
           />
         </div>
 
         <div>
           {/*Add new*/}
-          <Link to='/products/new'><Button className='mr-3 text-white'>
-            Add new
-          </Button></Link>
+          <Link to='/orders/new'>
+            <Button className='mr-3 text-white'>Add new</Button>
+          </Link>
           {/*Excel*/}
-          <Button className='mr-3 text-white' onClick={() => getExcelTable()}>
-            Download Excel
-          </Button>
+          {orders && (
+            <Button className='mr-3 text-white' onClick={() => getExcelTable(orders)}>
+              Download Excel
+            </Button>
+          )}
         </div>
       </div>
 
       {/* Table */}
-      <div className='rounded-md border'>
+      <div className='rounded-sm border dark:bg-boxdark dark:border-strokedark'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <TableHead key={header.id} className='text-center font-semibold'>
+                    <TableHead key={header.id} className='text-center font-semibold text-[16px]'>
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
