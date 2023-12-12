@@ -111,12 +111,14 @@ export const AddCustomerForm = () => {
               Phone <span className='text-danger'>*</span>
             </Label>
             <Input id='phone' className='col-span-4' {...register('phone')} />
-            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+            <p className='absolute -bottom-5 -translate-x-[-50%] text-xs text-danger text-center'>
               {errors.phone?.message}
             </p>
           </div>
-          <div className='grid grid-cols-5 items-center gap-4'>
-            <Label className='text-center'>Location</Label>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label className='text-center'>
+              Location <span className='text-danger'>*</span>
+            </Label>
             <Controller
               control={control}
               name='location'
@@ -166,6 +168,9 @@ export const AddCustomerForm = () => {
                 />
               )}
             />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.location?.message}
+            </p>
           </div>
           <Button disabled={!isDirty || isSubmitting} className='mt-4 text-white'>
             Add

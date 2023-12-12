@@ -3,6 +3,7 @@ import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Order } from '@/lib/types';
 import { DataTableRowActions } from './data-table-row-actions';
+import { format } from 'date-fns';
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -40,6 +41,9 @@ export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: 'date',
     header: 'Date',
+    cell: ({ row }) => ( 
+      <span>{format(new Date(row.original.date), 'dd.MM.yyyy')}</span>
+    ),
   },
   {
     accessorKey: 'quantity',

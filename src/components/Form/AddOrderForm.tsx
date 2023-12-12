@@ -1,36 +1,60 @@
 import { useForm, FieldErrors, Controller } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
-import Select from 'react-select'
-import { zodResolver } from '@hookform/resolvers/zod';
+import Select from 'react-select';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useAddOrderMutation, useGetCustomersQuery, useGetProductsQuery } from '@/redux';
-import { useEffect, useRef } from 'react';
+import { useAddOrderMutation, useGetCustomersQuery, useGetProductsQuery, useUpdateProductMutation } from '@/redux';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Customer, Product, TOrderSchema, orderSchema } from '@/lib/types';
+import { Customer, Product } from '@/lib/types';
 import { X } from 'lucide-react';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { LoadingSpinner } from '../LoadingSpinner';
+import DatePicker from '../DatePicker';
+
+type FormValues = {
+  product: string
+  customer: string
+  date: Date
+  quantity: number
+  status: string
+}
 
 export const AddOrderForm = () => {
-  const form = useForm<TOrderSchema>({
-    resolver: zodResolver(orderSchema),
-  });
+  const form = useForm<FormValues>();
 
-  const { register, handleSubmit, formState, reset, control } = form;
+  const { register, handleSubmit, formState, reset, control, getValues } = form;
   const { errors, isDirty, isSubmitting, isSubmitSuccessful } = formState;
 
   const navigate = useNavigate();
 
   const [addOrder] = useAddOrderMutation();
+  const [updateProduct] = useUpdateProductMutation();
 
-  const onSubmit = async (data: TOrderSchema) => {
+  const { data: productsData } = useGetProductsQuery('');
+  const { data: customersData } = useGetCustomersQuery('');
+
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const getSelectedProduct = (id: string) => productsData?.find(i => i._id === id);
+  const getProductQuantity = getSelectedProduct(selectedProduct)?.quantity || 0;
+
+  const onSubmit = async (data: FormValues) => {
     await addOrder(data).unwrap();
+    console.log(data);
+    
+    const updatedProduct = {
+      id: selectedProduct,
+      body: {
+        ...getSelectedProduct(selectedProduct),
+        quantity: getProductQuantity - Number(getValues().quantity),
+      },
+    };
+    console.log(updatedProduct);
+    await updateProduct(updatedProduct).unwrap();
     navigate('/orders');
   };
 
-  const onError = (errors: FieldErrors<TOrderSchema>) => {
+  const onError = (errors: FieldErrors<FormValues>) => {
     console.log(errors);
   };
 
@@ -39,13 +63,6 @@ export const AddOrderForm = () => {
   }, [isSubmitSuccessful, reset]);
 
   const formRef = useRef<HTMLFormElement>(null);
-
-  useClickOutside(formRef, () => {
-    navigate('/orders');
-  });
-
-  const { data: productsData } = useGetProductsQuery('');
-  const { data: customersData } = useGetCustomersQuery('');
 
   interface ProductOption {
     readonly value: string;
@@ -61,11 +78,11 @@ export const AddOrderForm = () => {
     if (productsData) {
       return productsData
         .filter((product: Product) =>
-          product.title.toLowerCase().includes(inputValue.toLowerCase()),
+          product.title.toLowerCase().includes(inputValue.toLowerCase()) && product.quantity > 0,
         )
         .map((product: Product) => ({
           label: product.title,
-          value: product.title,
+          value: product._id,
         }));
     }
     return [];
@@ -79,7 +96,7 @@ export const AddOrderForm = () => {
         )
         .map((customer: Customer) => ({
           label: customer.name,
-          value: customer.name,
+          value: customer._id,
         }));
     }
     return [];
@@ -103,8 +120,8 @@ export const AddOrderForm = () => {
   const statusOptions = [
     { value: 'pending', label: 'Pending' },
     { value: 'complete', label: 'Complete' },
-    { value: 'canceled', label: 'Canceled' }
-  ]
+    { value: 'canceled', label: 'Canceled' },
+  ];
 
   const themeColor = JSON.parse(localStorage.getItem('theme') as string);
   const selectBackgroundColor = themeColor === 'dark' ? '#1A222C' : '#fff';
@@ -129,18 +146,26 @@ export const AddOrderForm = () => {
             <Label htmlFor='date' className='text-center'>
               Date <span className='text-danger'>*</span>
             </Label>
-            <Input id='date' className='col-span-4' {...register('date')} />
+            <Controller
+              name='date'
+              control={control}
+              rules={{ required: 'Date is required.' }} 
+              render={({ field }) => (
+                <DatePicker selected={field.value} onSelect={date => field.onChange(date)} />
+              )}
+            />
             <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
               {errors.date?.message}
             </p>
           </div>
-          <div className='grid grid-cols-5 items-center gap-4'>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
             <Label className='text-center'>
               Customer <span className='text-danger'>*</span>
             </Label>
             <Controller
               control={control}
               name='customer'
+              rules={{ required: 'Customer is required.' }} 
               render={({ field: { onChange, onBlur } }) => (
                 <AsyncSelect
                   id='customer'
@@ -179,22 +204,26 @@ export const AddOrderForm = () => {
                   }}
                   className='col-span-4 h-10'
                   cacheOptions
-                  onChange={selectedOption => onChange(selectedOption?.value || null)}
+                  onChange={selectedOption => onChange(selectedOption?.label || null)}
                   onBlur={onBlur}
                   loadOptions={loadOptionsCustomer}
                   defaultOptions
-                  noOptionsMessage={() => 'Location is not found'}
+                  noOptionsMessage={() => 'Customers are not found'}
                 />
               )}
             />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.customer?.message}
+            </p>
           </div>
-          <div className='grid grid-cols-5 items-center gap-4'>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
             <Label className='text-center'>
               Product <span className='text-danger'>*</span>
             </Label>
             <Controller
               control={control}
               name='product'
+              rules={{ required: 'Product is required.' }} 
               render={({ field: { onChange, onBlur } }) => (
                 <AsyncSelect
                   id='product'
@@ -233,20 +262,42 @@ export const AddOrderForm = () => {
                   }}
                   className='col-span-4 h-10'
                   cacheOptions
-                  onChange={selectedOption => onChange(selectedOption?.value || null)}
+                  onChange={selectedOption => {
+                    setSelectedProduct(selectedOption?.value || '');
+                    onChange(selectedOption?.label || null)
+                  }}
                   onBlur={onBlur}
                   loadOptions={loadOptions}
                   defaultOptions
-                  noOptionsMessage={() => 'Location is not found'}
+                  noOptionsMessage={() => 'Products are not found'}
                 />
               )}
             />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.product?.message}
+            </p>
           </div>
           <div className='relative grid grid-cols-5 items-center gap-4'>
             <Label htmlFor='quantity' className='text-center'>
               Quantity <span className='text-danger'>*</span>
             </Label>
-            <Input type='number' id='quantity' className='col-span-4' {...register('quantity')} />
+            <Input
+              type='number'
+              id='quantity'
+              className='col-span-4'
+              {...register('quantity', {
+                required: 'Quantity is required.',
+                min: {
+                  value: 1,
+                  message: `Quantity must be greater than 1`,
+                },
+                max: {
+                  value: getProductQuantity,
+                  message: `Quantity cannot exceed ${getProductQuantity}`,
+                },
+                setValueAs: (value) => Number(value),
+              })}
+            />
             <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
               {errors.quantity?.message}
             </p>
@@ -258,6 +309,7 @@ export const AddOrderForm = () => {
             <Controller
               control={control}
               name='status'
+              rules={{ required: 'Status is required.' }} 
               render={({ field: { onChange, onBlur } }) => (
                 <Select
                   id='status'
@@ -298,12 +350,15 @@ export const AddOrderForm = () => {
                   options={statusOptions}
                   onChange={selectedOption => onChange(selectedOption?.value || null)}
                   onBlur={onBlur}
-                  noOptionsMessage={() => 'Location is not found'}
+                  noOptionsMessage={() => 'Statuses are not found'}
                 />
               )}
             />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.status?.message}
+            </p>
           </div>
-          <Button disabled={!isDirty || isSubmitting} className='mt-4 text-white'>
+          <Button disabled={!isDirty || isSubmitting } className='mt-4 text-white'>
             Add
           </Button>
         </form>
