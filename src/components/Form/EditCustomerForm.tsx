@@ -20,7 +20,8 @@ export const EditCustomerForm = () => {
     defaultValues: {
       name: currentCustomer?.name,
       email: currentCustomer?.email,
-      phone: Number(currentCustomer?.phone),
+      phone: currentCustomer?.phone,
+      location: currentCustomer?.location,
     },
     resolver: zodResolver(customerSchema),
   });
@@ -36,15 +37,16 @@ export const EditCustomerForm = () => {
     const updatedCustomer = {
       id,
       body: {
-        name: getValues().name,
-        email: getValues().email,
-        phone: Number(getValues().phone),
-        location: getValues().location,
+        name: getValues().name || currentCustomer?.name,
+        email: getValues().email || currentCustomer?.email,
+        phone: getValues().phone || currentCustomer?.phone,
+        location: getValues().location || currentCustomer?.location,
       },
     };
 
     await updateCustomer(updatedCustomer).unwrap();
     navigate('/customers');
+    console.log(updatedCustomer);
   };
 
   const onError = (errors: FieldErrors<TCustomerSchema>) => {
@@ -128,17 +130,15 @@ export const EditCustomerForm = () => {
               Phone <span className='text-danger'>*</span>
             </Label>
             <Input id='phone' className='col-span-4' {...register('phone')} />
-            <p className='absolute -bottom-5 left-1/2 translate-x-[-50%] text-xs text-danger text-center'>
+            <p className='absolute -bottom-5 -translate-x-[-50%] text-xs text-danger text-center'>
               {errors.phone?.message}
             </p>
           </div>
           <div className='grid grid-cols-5 items-center gap-4'>
-            <Label className='text-center'>Location</Label>
+            <Label className='text-center'>Location <span className='text-danger'>*</span></Label>
             <Controller
               control={control}
               name='location'
-              shouldUnregister={false}
-              defaultValue={currentCustomer?.location}
               render={({ field: { onChange, onBlur } }) => (
                 <AsyncSelect
                   id='location'

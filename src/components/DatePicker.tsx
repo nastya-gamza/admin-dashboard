@@ -9,10 +9,11 @@ import { useState } from 'react';
 
 interface DatePickerProps {
   selected: Date;
+  today: Date;
   onSelect: (date: Date | undefined) => void;
 }
 
-const DatePicker = ({ selected, onSelect }: DatePickerProps) => {
+const DatePicker = ({ selected, onSelect, today }: DatePickerProps) => {
   const [date, setDate] = useState(selected);
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
@@ -36,7 +37,7 @@ const DatePicker = ({ selected, onSelect }: DatePickerProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0'>
-        <Calendar mode='single' selected={date} onSelect={handleDateSelect} initialFocus />
+        <Calendar mode='single' selected={date} onSelect={handleDateSelect} today={today} initialFocus />
       </PopoverContent>
     </Popover>
   );

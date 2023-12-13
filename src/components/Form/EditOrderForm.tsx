@@ -4,31 +4,41 @@ import Select from 'react-select';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useAddOrderMutation, useGetCustomersQuery, useGetProductsQuery, useUpdateProductMutation } from '@/redux';
+import {
+  useGetCustomersQuery,
+  useGetProductsQuery,
+  useUpdateProductMutation,
+  useGetOrdersQuery,
+  useUpdateOrderMutation,
+} from '@/redux';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Customer, Product } from '@/lib/types';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Customer, OrderFormValues, Product } from '@/lib/types';
 import { X } from 'lucide-react';
 import { LoadingSpinner } from '../LoadingSpinner';
 import DatePicker from '../DatePicker';
 
-type FormValues = {
-  product: string
-  customer: string
-  date: Date
-  quantity: number
-  status: string
-}
-
-export const AddOrderForm = () => {
-  const form = useForm<FormValues>();
+export const EditOrderForm = () => {
+  const { id } = useParams();
+  const { data } = useGetOrdersQuery('');
+  const currentOrder = data?.filter(i => i._id === id)[0];
+  
+  const form = useForm<OrderFormValues>({
+    defaultValues: {
+      product: currentOrder?.product,
+      customer: currentOrder?.customer,
+      date: currentOrder?.date ? new Date(currentOrder?.date) : new Date(),
+      quantity: currentOrder?.quantity,
+      status: currentOrder?.status,
+    },
+  });
 
   const { register, handleSubmit, formState, reset, control, getValues } = form;
-  const { errors, isDirty, isSubmitting, isSubmitSuccessful } = formState;
+  const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
   const navigate = useNavigate();
 
-  const [addOrder] = useAddOrderMutation();
+  const [updateOrder] = useUpdateOrderMutation();
   const [updateProduct] = useUpdateProductMutation();
 
   const { data: productsData } = useGetProductsQuery('');
@@ -37,11 +47,20 @@ export const AddOrderForm = () => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const getSelectedProduct = (id: string) => productsData?.find(i => i._id === id);
   const getProductQuantity = getSelectedProduct(selectedProduct)?.quantity || 0;
+  
+  const onSubmit = async () => {
+    const updatedOrder = {
+      id,
+      body: {
+        product: getValues().product || currentOrder?.product,
+        customer: getValues().customer || currentOrder?.customer,
+        date: getValues().date || currentOrder?.date,
+        quantity: getValues().quantity || currentOrder?.quantity,
+        status: getValues().status || currentOrder?.status,
+      },
+    };
+    await updateOrder(updatedOrder).unwrap();
 
-  const onSubmit = async (data: FormValues) => {
-    await addOrder(data).unwrap();
-    console.log(data);
-    
     const updatedProduct = {
       id: selectedProduct,
       body: {
@@ -49,12 +68,11 @@ export const AddOrderForm = () => {
         quantity: getProductQuantity - Number(getValues().quantity),
       },
     };
-    console.log(updatedProduct);
     await updateProduct(updatedProduct).unwrap();
     navigate('/orders');
   };
 
-  const onError = (errors: FieldErrors<FormValues>) => {
+  const onError = (errors: FieldErrors<OrderFormValues>) => {
     console.log(errors);
   };
 
@@ -77,8 +95,9 @@ export const AddOrderForm = () => {
   const filterProducts = (inputValue: string) => {
     if (productsData) {
       return productsData
-        .filter((product: Product) =>
-          product.title.toLowerCase().includes(inputValue.toLowerCase()) && product.quantity > 0,
+        .filter(
+          (product: Product) =>
+            product.title.toLowerCase().includes(inputValue.toLowerCase()) && product.quantity > 0,
         )
         .map((product: Product) => ({
           label: product.title,
@@ -122,12 +141,12 @@ export const AddOrderForm = () => {
     { value: 'complete', label: 'Complete' },
     { value: 'canceled', label: 'Canceled' },
   ];
-
+  
   const themeColor = JSON.parse(localStorage.getItem('theme') as string);
   const selectBackgroundColor = themeColor === 'dark' ? '#1A222C' : '#fff';
   const selectBorderColor = themeColor === 'dark' ? '#1A222C' : 'rgb(226, 232, 240)';
   const selectTextColor = themeColor === 'dark' ? '#fff' : 'rgb(33, 43, 54)';
-
+  
   return (
     <>
       {productsData && customersData ? (
@@ -149,9 +168,13 @@ export const AddOrderForm = () => {
             <Controller
               name='date'
               control={control}
-              rules={{ required: 'Date is required.' }} 
+              rules={{ required: 'Date is required.' }}
               render={({ field }) => (
-                <DatePicker selected={field.value} onSelect={date => field.onChange(date)} today={new Date()} />
+                <DatePicker
+                  selected={field.value}
+                  onSelect={date => field.onChange(date)}
+                  today={currentOrder?.date ? new Date(currentOrder?.date) : new Date()}
+                />
               )}
             />
             <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
@@ -165,7 +188,7 @@ export const AddOrderForm = () => {
             <Controller
               control={control}
               name='customer'
-              rules={{ required: 'Customer is required.' }} 
+              rules={{ required: 'Customer is required.' }}
               render={({ field: { onChange, onBlur } }) => (
                 <AsyncSelect
                   id='customer'
@@ -208,6 +231,10 @@ export const AddOrderForm = () => {
                   onBlur={onBlur}
                   loadOptions={loadOptionsCustomer}
                   defaultOptions
+                  defaultValue={{
+                    label: currentOrder?.customer,
+                    value: currentOrder?.customer,
+                  }}
                   noOptionsMessage={() => 'Customers are not found'}
                 />
               )}
@@ -223,7 +250,7 @@ export const AddOrderForm = () => {
             <Controller
               control={control}
               name='product'
-              rules={{ required: 'Product is required.' }} 
+              rules={{ required: 'Product is required.' }}
               render={({ field: { onChange, onBlur } }) => (
                 <AsyncSelect
                   id='product'
@@ -264,11 +291,15 @@ export const AddOrderForm = () => {
                   cacheOptions
                   onChange={selectedOption => {
                     setSelectedProduct(selectedOption?.value || '');
-                    onChange(selectedOption?.label || null)
+                    onChange(selectedOption?.label || null);
                   }}
                   onBlur={onBlur}
                   loadOptions={loadOptions}
                   defaultOptions
+                  defaultValue={{
+                    label: currentOrder?.product,
+                    value: currentOrder?._id,
+                  }}
                   noOptionsMessage={() => 'Products are not found'}
                 />
               )}
@@ -295,7 +326,7 @@ export const AddOrderForm = () => {
                   value: getProductQuantity,
                   message: `Quantity cannot exceed ${getProductQuantity}`,
                 },
-                setValueAs: (value) => Number(value),
+                setValueAs: value => Number(value),
               })}
             />
             <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
@@ -309,7 +340,7 @@ export const AddOrderForm = () => {
             <Controller
               control={control}
               name='status'
-              rules={{ required: 'Status is required.' }} 
+              rules={{ required: 'Status is required.' }}
               render={({ field: { onChange, onBlur } }) => (
                 <Select
                   id='status'
@@ -350,6 +381,10 @@ export const AddOrderForm = () => {
                   options={statusOptions}
                   onChange={selectedOption => onChange(selectedOption?.value || null)}
                   onBlur={onBlur}
+                  defaultValue={{
+                    label: currentOrder?.status,
+                    value: currentOrder?.status,
+                  }}
                   noOptionsMessage={() => 'Statuses are not found'}
                 />
               )}
@@ -358,8 +393,8 @@ export const AddOrderForm = () => {
               {errors.status?.message}
             </p>
           </div>
-          <Button disabled={!isDirty || isSubmitting } className='mt-4 text-white'>
-            Add
+          <Button disabled={isSubmitting} className='mt-4 text-white'>
+            Edit
           </Button>
         </form>
       ) : (

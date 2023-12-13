@@ -67,23 +67,27 @@ export type TCustomerSchema = z.infer<typeof customerSchema>;
 
 export const productSchema = z.object({
   title: z.string().trim().min(1, { message: 'Please enter product title.' }),
-  quantity: z.coerce.number(),
-  price: z.coerce.number(),
+  quantity: z.number({
+    required_error: "Quantity is required",
+    invalid_type_error: "Quantity must be a positive integer"
+  }).int().min(0),
+  price: z.number({
+    required_error: "Price is required",
+    invalid_type_error: "Price must be a number"
+  }).min(0),
   producer: z.string().trim().min(1, { message: 'Please enter product producer.' }),
   color: z.string().trim().min(1, { message: 'Please enter product color.' }),
 });
 
 export type TProductSchema = z.infer<typeof productSchema>;
 
-// export const orderSchema = z.object({
-//   product: z.string({required_error: 'Product is required.'}),
-//   customer: z.string({required_error: 'Customer is required.'}),
-//   date: z.date({required_error: 'Date is required.'}),
-//   quantity: z.any(),
-//   status: z.string({required_error: 'Please select order status.'}),
-// });
-
-// export type TOrderSchema = z.infer<typeof orderSchema>;
+export type OrderFormValues = {
+  product: string;
+  customer: string;
+  date: Date;
+  quantity: number;
+  status: string;
+};
 
 export const loginUserSchema = z.object({
   email: z.string().min(1, { message: 'Email is required.' }).email('Email format is not valid'),

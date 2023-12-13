@@ -103,41 +103,51 @@ export const EditProductForm = () => {
             className='absolute right-3 top-3'>
             <X size={20} />
           </button>
-          <div className='grid grid-cols-5 items-center gap-2'>
-        <Label htmlFor='title' className='text-center'>
-          Title <span className='text-danger'>*</span>
-        </Label>
-        <Input id='title' className='col-span-4' {...register('title')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.title?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='quantity' className='text-center'>
-          Quantity <span className='text-danger'>*</span>
-        </Label>
-        <Input type='email' id='quantity' className='col-span-4' {...register('quantity')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.quantity?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='price' className='text-center'>
-          Price <span className='text-danger'>*</span>
-        </Label>
-        <Input id='price' className='col-span-4' {...register('price')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.price?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='producer' className='text-center'>
-            Producer <span className='text-danger'>*</span>
-        </Label>
-        <Input id='producer' className='col-span-4' {...register('producer')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.producer?.message}</p>
-      </div>
-      <div className='grid grid-cols-5 items-center gap-4'>
-        <Label htmlFor='color' className='text-center'>
-          Color <span className='text-danger'>*</span>
-        </Label>
-        <Input id='color' className='col-span-4' {...register('color')} />
-        <p className='text-xs text-danger col-span-5 text-center'>{errors.color?.message}</p>
-      </div>
+          <div className='relative grid grid-cols-5 items-center gap-2'>
+            <Label htmlFor='title' className='text-center'>
+              Title <span className='text-danger'>*</span>
+            </Label>
+            <Input id='title' className='col-span-4' {...register('title')} />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.title?.message}
+            </p>
+          </div>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label htmlFor='quantity' className='text-center'>
+              Quantity <span className='text-danger'>*</span>
+            </Label>
+            <Input type='email' id='quantity' className='col-span-4' {...register('quantity', {valueAsNumber: true})} />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.quantity?.message}
+            </p>
+          </div>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label htmlFor='price' className='text-center'>
+              Price <span className='text-danger'>*</span>
+            </Label>
+            <Input id='price' className='col-span-4' {...register('price', {valueAsNumber: true})} />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.price?.message}
+            </p>
+          </div>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label htmlFor='producer' className='text-center'>
+              Producer <span className='text-danger'>*</span>
+            </Label>
+            <Input id='producer' className='col-span-4' {...register('producer')} />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.producer?.message}
+            </p>
+          </div>
+          <div className='relative grid grid-cols-5 items-center gap-4'>
+            <Label htmlFor='color' className='text-center'>
+              Color <span className='text-danger'>*</span>
+            </Label>
+            <Input id='color' className='col-span-4' {...register('color')} />
+            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+              {errors.color?.message}
+            </p>
+          </div>
           <Button disabled={isSubmitting} className='mt-4 text-white'>
             Edit
           </Button>
