@@ -4,24 +4,21 @@ import Select from 'react-select';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useAddOrderMutation, useGetCustomersQuery, useGetProductsQuery, useUpdateProductMutation } from '@/redux';
+import {
+  useAddOrderMutation,
+  useGetCustomersQuery,
+  useGetProductsQuery,
+  useUpdateProductMutation,
+} from '@/redux';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Customer, Product } from '@/lib/types';
+import { Customer, OrderFormValues, Product } from '@/lib/types';
 import { X } from 'lucide-react';
 import { LoadingSpinner } from '../LoadingSpinner';
 import DatePicker from '../DatePicker';
 
-type FormValues = {
-  product: string
-  customer: string
-  date: Date
-  quantity: number
-  status: string
-}
-
 export const AddOrderForm = () => {
-  const form = useForm<FormValues>();
+  const form = useForm<OrderFormValues>();
 
   const { register, handleSubmit, formState, reset, control, getValues } = form;
   const { errors, isDirty, isSubmitting, isSubmitSuccessful } = formState;
@@ -38,10 +35,9 @@ export const AddOrderForm = () => {
   const getSelectedProduct = (id: string) => productsData?.find(i => i._id === id);
   const getProductQuantity = getSelectedProduct(selectedProduct)?.quantity || 0;
 
-  const onSubmit = async (data: FormValues) => {
-    await addOrder(data).unwrap();
-    console.log(data);
-    
+  const onSubmit = async (data: OrderFormValues) => {
+    await addOrder({ ...data, productId: selectedProduct }).unwrap();
+
     const updatedProduct = {
       id: selectedProduct,
       body: {
@@ -49,12 +45,11 @@ export const AddOrderForm = () => {
         quantity: getProductQuantity - Number(getValues().quantity),
       },
     };
-    console.log(updatedProduct);
     await updateProduct(updatedProduct).unwrap();
     navigate('/orders');
   };
 
-  const onError = (errors: FieldErrors<FormValues>) => {
+  const onError = (errors: FieldErrors<OrderFormValues>) => {
     console.log(errors);
   };
 
@@ -77,8 +72,9 @@ export const AddOrderForm = () => {
   const filterProducts = (inputValue: string) => {
     if (productsData) {
       return productsData
-        .filter((product: Product) =>
-          product.title.toLowerCase().includes(inputValue.toLowerCase()) && product.quantity > 0,
+        .filter(
+          (product: Product) =>
+            product.title.toLowerCase().includes(inputValue.toLowerCase()) && product.quantity > 0,
         )
         .map((product: Product) => ({
           label: product.title,
@@ -149,9 +145,13 @@ export const AddOrderForm = () => {
             <Controller
               name='date'
               control={control}
-              rules={{ required: 'Date is required.' }} 
+              rules={{ required: 'Date is required.' }}
               render={({ field }) => (
-                <DatePicker selected={field.value} onSelect={date => field.onChange(date)} today={new Date()} />
+                <DatePicker
+                  selected={field.value}
+                  onSelect={date => field.onChange(date)}
+                  today={new Date()}
+                />
               )}
             />
             <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
@@ -165,7 +165,7 @@ export const AddOrderForm = () => {
             <Controller
               control={control}
               name='customer'
-              rules={{ required: 'Customer is required.' }} 
+              rules={{ required: 'Customer is required.' }}
               render={({ field: { onChange, onBlur } }) => (
                 <AsyncSelect
                   id='customer'
@@ -223,7 +223,7 @@ export const AddOrderForm = () => {
             <Controller
               control={control}
               name='product'
-              rules={{ required: 'Product is required.' }} 
+              rules={{ required: 'Product is required.' }}
               render={({ field: { onChange, onBlur } }) => (
                 <AsyncSelect
                   id='product'
@@ -264,7 +264,7 @@ export const AddOrderForm = () => {
                   cacheOptions
                   onChange={selectedOption => {
                     setSelectedProduct(selectedOption?.value || '');
-                    onChange(selectedOption?.label || null)
+                    onChange(selectedOption?.label || null);
                   }}
                   onBlur={onBlur}
                   loadOptions={loadOptions}
@@ -289,13 +289,13 @@ export const AddOrderForm = () => {
                 required: 'Quantity is required.',
                 min: {
                   value: 1,
-                  message: `Quantity must be greater than 1`,
+                  message: `Quantity must be greater than 0`,
                 },
                 max: {
                   value: getProductQuantity,
                   message: `Quantity cannot exceed ${getProductQuantity}`,
                 },
-                setValueAs: (value) => Number(value),
+                setValueAs: value => Number(value),
               })}
             />
             <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
@@ -309,7 +309,7 @@ export const AddOrderForm = () => {
             <Controller
               control={control}
               name='status'
-              rules={{ required: 'Status is required.' }} 
+              rules={{ required: 'Status is required.' }}
               render={({ field: { onChange, onBlur } }) => (
                 <Select
                   id='status'
@@ -358,7 +358,7 @@ export const AddOrderForm = () => {
               {errors.status?.message}
             </p>
           </div>
-          <Button disabled={!isDirty || isSubmitting } className='mt-4 text-white'>
+          <Button disabled={!isDirty || isSubmitting} className='mt-4 text-white'>
             Add
           </Button>
         </form>

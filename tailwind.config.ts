@@ -82,6 +82,9 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      backgroundImage: {
+        'not-found': "url('/icons/error.svg')",
+      },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },

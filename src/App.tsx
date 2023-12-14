@@ -22,21 +22,31 @@ export const App = () => {
       <Route element={<PrivateRoute />}>
         <Route path='/' element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path='customers' element={<Customers />} />
-          <Route path='customers/new' element={<CreateCustomer />} />
-          <Route path='customers/edit/:id' element={<EditCustomer />} />
-          <Route path='products' element={<Products />} />
-          <Route path='products/new' element={<CreateProduct />} />
-          <Route path='products/edit/:id' element={<EditProduct />} />
-          <Route path='orders' element={<Orders />} />
-          <Route path='orders/new' element={<CreateOrder />} />
-          <Route path='orders/edit/:id' element={<EditOrder />} />
+
+          <Route path='customers'>
+            <Route index element={<Customers />} />
+            <Route path='new' element={<CreateCustomer />} />
+            <Route path='edit/:id' element={<EditCustomer />} />
+          </Route>
+
+          <Route path='products'>
+            <Route index element={<Products />} />
+            <Route path='new' element={<CreateProduct />} />
+            <Route path='edit/:id' element={<EditProduct />} />
+          </Route>
+
+          <Route path='orders'>
+            <Route index element={<Orders />} />
+            <Route path='new' element={<CreateOrder />} />
+            <Route path='edit/:id' element={<EditOrder />} />
+          </Route>
+          
           <Route path='/calendar' element={<CalendarPage />} />
           <Route path='*' element={<NotFound />} />
         </Route>
       </Route>
-        <Route path='login' element={<Login />} />
-        <Route path='signup' element={<SignUp />} />
+      <Route path='login' element={<Login />} />
+      <Route path='signup' element={<SignUp />} />
     </Routes>
   );
 };

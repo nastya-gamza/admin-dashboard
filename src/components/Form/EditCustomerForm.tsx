@@ -46,7 +46,6 @@ export const EditCustomerForm = () => {
 
     await updateCustomer(updatedCustomer).unwrap();
     navigate('/customers');
-    console.log(updatedCustomer);
   };
 
   const onError = (errors: FieldErrors<TCustomerSchema>) => {

@@ -6,16 +6,6 @@ import { DataTableRowActions } from './data-table-row-actions';
 // import { useGetProductsQuery } from '@/redux';
 
 export const columns: ColumnDef<Product>[] = [
-  // {
-  //   accessorKey: '_id',
-  //   header: 'Id',
-  // },
-  // {
-  //   header: 'Image',
-  //   cell: ({ row }) => {
-  //     return <img src={row.original.img} height={48} alt='Product Image' className='inline h-12' />;
-  //   },
-  // },
   {
     accessorKey: 'title',
     header: ({ column }) => {
@@ -32,7 +22,17 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'price',
-    header: 'Price',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className='text-[16px]'>
+          Price
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: 'producer',
@@ -44,7 +44,17 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'quantity',
-    header: 'Quantity',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className='text-[16px]'>
+          Quantity
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
   },
   {
     header: 'In Stoke',
@@ -64,16 +74,3 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
-
-// export const ColumnsWithImage = () => {
-//   const { data: products = [] } = useGetProductsQuery('');
-
-//   if (products.length > 0) {
-//     columns[1].cell = ({ row }) => {
-//       const product = products.find(p => p._id === row.original._id);
-//       return <img src={product!.img} height={48} alt='Product Image' className='inline h-12' />;
-//     };
-//   }
-
-//   return columns;
-// };

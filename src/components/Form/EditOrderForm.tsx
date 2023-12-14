@@ -46,13 +46,14 @@ export const EditOrderForm = () => {
 
   const [selectedProduct, setSelectedProduct] = useState('');
   const getSelectedProduct = (id: string) => productsData?.find(i => i._id === id);
-  const getProductQuantity = getSelectedProduct(selectedProduct)?.quantity || 0;
+  const getProductQuantity = getSelectedProduct(selectedProduct || currentOrder?.productId as string)?.quantity || 0;
   
   const onSubmit = async () => {
     const updatedOrder = {
       id,
       body: {
         product: getValues().product || currentOrder?.product,
+        productId: selectedProduct || currentOrder?.productId as string,
         customer: getValues().customer || currentOrder?.customer,
         date: getValues().date || currentOrder?.date,
         quantity: getValues().quantity || currentOrder?.quantity,
@@ -62,10 +63,10 @@ export const EditOrderForm = () => {
     await updateOrder(updatedOrder).unwrap();
 
     const updatedProduct = {
-      id: selectedProduct,
+      id: selectedProduct || currentOrder?.productId as string,
       body: {
-        ...getSelectedProduct(selectedProduct),
-        quantity: getProductQuantity - Number(getValues().quantity),
+        ...getSelectedProduct(selectedProduct || currentOrder?.productId as string),
+        quantity: getProductQuantity + (currentOrder?.quantity || 0) - Number(getValues().quantity),
       },
     };
     await updateProduct(updatedProduct).unwrap();

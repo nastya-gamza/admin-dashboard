@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useAppDispatch } from '@/hooks/useRedux';
 import { removeUser } from '@/redux/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = ({
   isOpen,
@@ -29,6 +30,8 @@ export const Header = ({
     dispatch(removeUser());
     localStorage.removeItem('userAuth')
   }
+
+  const navigate = useNavigate();
 
   return (
     <header className='flex items-center gap-6 h-16 sticky top-0 left-0 z-40 bg-white px-6 shadow-sm dark:bg-boxdark'>
@@ -54,7 +57,7 @@ export const Header = ({
               <DropdownMenuContent className='mr-5'>
                 <DropdownMenuLabel className='grid'>Profile <span className='text-xs text-gray font-thin'>{email}</span></DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/calendar')}>Calendar</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

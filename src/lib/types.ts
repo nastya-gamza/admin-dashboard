@@ -23,6 +23,7 @@ export interface Product {
 export interface Order {
   _id: string;
   product: string;
+  productId: string;
   customer: string;
   date: string;
   quantity: number;
@@ -60,21 +61,26 @@ export const customerSchema = z.object({
     .min(1, { message: 'Email is required.' })
     .email('Email format is not valid'),
   phone: z.string().trim().min(7, { message: 'Phone number must be at least 7 characters.' }),
-  location: z.string({required_error: 'Location is required.'}),
+  location: z.string({ required_error: 'Location is required.' }),
 });
 
 export type TCustomerSchema = z.infer<typeof customerSchema>;
 
 export const productSchema = z.object({
   title: z.string().trim().min(1, { message: 'Please enter product title.' }),
-  quantity: z.number({
-    required_error: "Quantity is required",
-    invalid_type_error: "Quantity must be a positive integer"
-  }).int().min(0),
-  price: z.number({
-    required_error: "Price is required",
-    invalid_type_error: "Price must be a number"
-  }).min(0),
+  quantity: z
+    .number({
+      required_error: 'Quantity is required',
+      invalid_type_error: 'Quantity must be a positive integer',
+    })
+    .int()
+    .min(0),
+  price: z
+    .number({
+      required_error: 'Price is required',
+      invalid_type_error: 'Price must be a number',
+    })
+    .min(0),
   producer: z.string().trim().min(1, { message: 'Please enter product producer.' }),
   color: z.string().trim().min(1, { message: 'Please enter product color.' }),
 });

@@ -32,7 +32,7 @@ export const MapChart = () => {
         </div>
       ) : (
         <ComposableMap
-          className='h-[325px] w-full'
+          className='h-[325px] w-full transition-all'
           projectionConfig={{ rotate: [-50, 0, 0], scale: 220 }}>
           <ZoomableGroup
             zoom={position.zoom}

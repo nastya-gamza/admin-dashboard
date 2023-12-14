@@ -15,8 +15,8 @@ import { Order } from '@/lib/types';
 
 export const Home = () => {
   const dashboardCards = [
-    { title: 'Total Profit', icon: <CircleDollarSign />, number: 45.2, fluctuation: 0.43 },
-    { title: 'Total Orders', icon: <ShoppingCart />, number: 3472, fluctuation: 2.59 },
+    { title: 'Total Profit', icon: <CircleDollarSign />, number: 4509.2, fluctuation: 0.43 },
+    { title: 'Total Sales', icon: <ShoppingCart />, number: 3472, fluctuation: 2.59 },
     { title: 'Total Product', icon: <PackageSearch />, number: 2738, fluctuation: 4.35 },
     { title: 'Total Customers', icon: <Users2 />, number: 3921, fluctuation: -0.95 },
   ];
@@ -37,7 +37,7 @@ export const Home = () => {
 
   return (
     <>
-      <section className='grid items-stretch lg:grid-cols-4 grid-cols-2 gap-6 md:gap-4 mt-2 h-full'>
+      <section className='sm:grid flex flex-col items-stretch lg:grid-cols-4 grid-cols-2 gap-6 md:gap-4 mt-2 h-full'>
         {dashboardCards.map(({ title, icon, number, fluctuation }) => (
           <DashboardCard
             key={title}
