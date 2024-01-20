@@ -1,20 +1,21 @@
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { MainLayout } from './layouts/MainLayout';
-import { Home } from './pages/Home';
-import { Customers } from './pages/Customers';
-import { Products } from './pages/Products';
-import { Orders } from './pages/Orders';
-import { Login } from './pages/Login';
-import { CreateCustomer } from './pages/CreateCustomer';
-import { EditCustomer } from './pages/EditCustomer';
-import { SignUp } from './pages/SignUp';
-import { PrivateRoute } from './pages/Private';
-import { CalendarPage } from './pages/CalendarPage';
-import { CreateProduct } from './pages/CreateProduct';
-import { EditProduct } from './pages/EditProduct';
-import { EditOrder } from './pages/EditOrder';
-import { CreateOrder } from './pages/CreateOrder';
-import NotFound from './pages/NotFound';
+import { MainLayout } from '@/layouts/MainLayout';
+import { PrivateRoute } from '@/pages/Private';
+import { Login } from '@/pages/Login';
+import { SignUp } from '@/pages/SignUp';
+const Home = lazy(() => import('@/pages/Home'));
+const Customers = lazy(() => import('@/pages/Customers'));
+const Products = lazy(() => import('@/pages/Products'));
+const Orders = lazy(() => import('@/pages/Orders'));
+const CreateCustomer = lazy(() => import('@/pages/CreateCustomer'));
+const EditCustomer = lazy(() => import('@/pages/EditCustomer'));
+const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
+const CreateProduct = lazy(() => import('@/pages/CreateProduct'));
+const EditProduct = lazy(() => import('@/pages/EditProduct'));
+const EditOrder = lazy(() => import('@/pages/EditOrder'));
+const CreateOrder = lazy(() => import('@/pages/CreateOrder'));
+const NotFound = lazy(() => import('@/pages/NotFound'));
 
 export const App = () => {
   return (
@@ -40,7 +41,7 @@ export const App = () => {
             <Route path='new' element={<CreateOrder />} />
             <Route path='edit/:id' element={<EditOrder />} />
           </Route>
-          
+
           <Route path='/calendar' element={<CalendarPage />} />
           <Route path='*' element={<NotFound />} />
         </Route>

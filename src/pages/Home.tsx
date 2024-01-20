@@ -13,7 +13,7 @@ import { columns } from '@/components/Tables/RecentOrdersTable/columns';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Order } from '@/lib/types';
 
-export const Home = () => {
+const Home = () => {
   const dashboardCards = [
     { title: 'Total Profit', icon: <CircleDollarSign />, number: 4509.2, fluctuation: 0.43 },
     { title: 'Total Sales', icon: <ShoppingCart />, number: 3472, fluctuation: 2.59 },
@@ -99,3 +99,5 @@ export const Home = () => {
     </>
   );
 };
+
+export default Home;

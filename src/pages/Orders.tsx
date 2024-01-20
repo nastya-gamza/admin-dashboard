@@ -3,7 +3,7 @@ import { columns } from '@/components/Tables/OrdersTable/columns';
 import { DataTable } from '@/components/Tables/OrdersTable/dataTable';
 import { useGetOrdersQuery } from '@/redux';
 
-export const Orders = () => {
+const Orders = () => {
   const { data, isLoading } = useGetOrdersQuery('');
 
   if (isLoading)
@@ -15,3 +15,5 @@ export const Orders = () => {
 
   return <section>{data && <DataTable columns={columns} data={data} />}</section>;
 };
+
+export default Orders;

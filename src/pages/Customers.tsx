@@ -3,7 +3,7 @@ import { columns } from '@/components/Tables/CustomersTable/columns';
 import { DataTable } from '@/components/Tables/CustomersTable/dataTable';
 import { useGetCustomersQuery } from '@/redux';
 
-export const Customers = () => {
+const Customers = () => {
   const { data, isLoading } = useGetCustomersQuery('');
 
   if (isLoading)
@@ -15,3 +15,5 @@ export const Customers = () => {
 
   return <section>{data && <DataTable columns={columns} data={data} />}</section>;
 };
+
+export default Customers;
