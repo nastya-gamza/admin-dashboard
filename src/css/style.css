@@ -151,6 +151,11 @@
     height: 100%;
     background-color: #F1F5F9;
   }
+
+  dialog::backdrop {
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+  }
 }
 
 .fc-col-header,
@@ -177,15 +182,3 @@
 canvas {
     width: 100% !important;
 }
-
-/* ::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1A222C;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #24303F; 
-} */

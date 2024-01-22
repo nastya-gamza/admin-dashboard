@@ -5,7 +5,7 @@ import { Product } from '@/lib/types';
 import { Button } from '../../ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { ModalWindow } from '../../ModalWindow';
+import ModalConfirm from '@/components/ModalConfirm';
 
 interface DataTableRowActionsProps<TData extends Product> {
   row: Row<TData>;
@@ -28,10 +28,6 @@ export function DataTableRowActions<TData extends Product>({
     navigate(`/products/edit/${id}`);
   };
 
-  const handleCancelDelete = () => {
-    setShowDeleteWarning(false);
-  };
-
   return (
     <>
       <Button variant='ghost' onClick={() => handleEditProduct(row.original._id)}>
@@ -40,15 +36,12 @@ export function DataTableRowActions<TData extends Product>({
       <Button variant='ghost' onClick={() => setShowDeleteWarning(true)}>
         <Trash2 size={20} strokeWidth={1.25} />
       </Button>
-      {showDeleteWarning && (
-        <ModalWindow
-          id={row.original._id}
-          handleClose={setShowDeleteWarning}
-          handleDeleteRow={handleDeleteProduct}
-          handleCancelDelete={handleCancelDelete}
-          text='This will permanently delete selected product.'
-        />
-      )}
+      <ModalConfirm
+        isOpen={showDeleteWarning}
+        setIsOpen={setShowDeleteWarning}
+        proceed={() => handleDeleteProduct(row.original._id)}
+        text='This will permanently delete selected product.'
+      />
     </>
   );
 }

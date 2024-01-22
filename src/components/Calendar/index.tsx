@@ -7,7 +7,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useRef, useState } from 'react';
 import { CalendarForm } from '../Form/CalendarForm';
 import { TCalendar } from '@/lib/types';
-import { ModalWindow } from '../ModalWindow';
+import ModalConfirm from '../ModalConfirm';
 
 export const Calendar = () => {
   const [showAddEventForm, setShowAddEventForm] = useState(false);
@@ -52,11 +52,6 @@ export const Calendar = () => {
     setDeleteEvent('');
   };
 
-  const handleCancelDelete = () => {
-    setShowDeleteWarning(false);
-    setDeleteEvent('');
-  };
-
   return (
     <>
       <FullCalendar
@@ -93,14 +88,12 @@ export const Calendar = () => {
           />
         </div>
       )}
-      {showDeleteWarning && (
-        <ModalWindow
-          handleClose={setShowDeleteWarning}
-          handleDelete={handleDelete}
-          handleCancelDelete={handleCancelDelete}
-          text='This will permanently delete selected event from your calendar.'
-        />
-      )}
+      <ModalConfirm
+        isOpen={showDeleteWarning}
+        setIsOpen={setShowDeleteWarning}
+        proceed={handleDelete}
+        text='This will permanently delete selected event from your calendar.'
+      />
     </>
   );
 };

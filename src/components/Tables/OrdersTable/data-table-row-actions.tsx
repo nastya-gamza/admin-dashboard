@@ -5,15 +5,13 @@ import { Order } from '@/lib/types';
 import { Button } from '../../ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { ModalWindow } from '../../ModalWindow';
+import ModalConfirm from '@/components/ModalConfirm';
 
 interface DataTableRowActionsProps<TData extends Order> {
   row: Row<TData>;
 }
 
-export function DataTableRowActions<TData extends Order>({
-  row,
-}: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData extends Order>({ row }: DataTableRowActionsProps<TData>) {
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
   const [deleteOrder] = useDeleteOrderMutation();
 
@@ -28,10 +26,6 @@ export function DataTableRowActions<TData extends Order>({
     navigate(`/orders/edit/${id}`);
   };
 
-  const handleCancelDelete = () => {
-    setShowDeleteWarning(false);
-  };
-
   return (
     <>
       <Button variant='ghost' onClick={() => handleEditOrder(row.original._id)}>
@@ -40,15 +34,12 @@ export function DataTableRowActions<TData extends Order>({
       <Button variant='ghost' onClick={() => setShowDeleteWarning(true)}>
         <Trash2 size={20} strokeWidth={1.25} />
       </Button>
-      {showDeleteWarning && (
-        <ModalWindow
-          id={row.original._id}
-          handleClose={setShowDeleteWarning}
-          handleDeleteRow={handleDeleteOrder}
-          handleCancelDelete={handleCancelDelete}
-          text='This will permanently delete selected order.'
-        />
-      )}
+      <ModalConfirm
+        isOpen={showDeleteWarning}
+        setIsOpen={setShowDeleteWarning}
+        proceed={() => handleDeleteOrder(row.original._id)}
+        text='This will permanently delete selected order.'
+      />
     </>
   );
 }
