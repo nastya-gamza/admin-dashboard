@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             placeholder='Filter emails...'
             value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={event => table.getColumn('email')?.setFilterValue(event.target.value)}
-            className='max-w-sm dark:bg-boxdark'
+            className='max-w-sm bg-white dark:bg-boxdark'
           />
         </div>
 

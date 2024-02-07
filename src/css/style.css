@@ -148,12 +148,21 @@
   }
 
   body {
-    height: 100%;
+    min-height: 100%;
     background-color: #F1F5F9;
+  }
+
+  #root {
+    height: calc(100% - 64px);
   }
 
   dialog::backdrop {
     background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .dark dialog::backdrop {
+    background-color: #02081780;
     backdrop-filter: blur(4px);
   }
 }

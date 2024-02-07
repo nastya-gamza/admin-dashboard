@@ -1,5 +1,5 @@
-import { useGetCustomersQuery } from '@/redux';
 import { useState } from 'react';
+import { useGetCustomersQuery } from '@/redux';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import { LoadingSpinner } from '../LoadingSpinner';
 

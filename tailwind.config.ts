@@ -126,6 +126,9 @@ module.exports = {
         7: '-5px 0 0 #313D4A, 5px 0 0 #313D4A',
         8: '1px 0 0 #313D4A, -1px 0 0 #313D4A, 0 1px 0 #313D4A, 0 -1px 0 #313D4A, 0 3px 13px rgb(0 0 0 / 8%)',
       },
+      blockHeight: {
+        'mainHeight': 'calc(100vh - 64px)',
+      }
     },
   },
   plugins: [require('tailwindcss-animate')],

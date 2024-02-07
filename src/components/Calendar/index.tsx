@@ -1,26 +1,26 @@
+import { useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EventClickArg, EventInput } from '@fullcalendar/core/index.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { useRef, useState } from 'react';
 import { CalendarForm } from '../Form/CalendarForm';
-import { TCalendar } from '@/lib/types';
 import ModalConfirm from '../ModalConfirm';
+import { TCalendar } from '@/lib/types';
 
 export const Calendar = () => {
   const [showAddEventForm, setShowAddEventForm] = useState(false);
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
-  const [currentEvents, setCurrentEvents] = useLocalStorage<EventInput[]>('events', []);
   const calendarRef = useRef<FullCalendar>(null);
   const [deleteEvent, setDeleteEvent] = useState('');
+  const [currentEvents, setCurrentEvents] = useLocalStorage<EventInput[]>('events', []);
+
+  let clickedDate = '';
 
   const handleDateClick = () => {
     setShowAddEventForm(true);
   };
-
-  let clickedDate = '';
 
   const dateClick = (info: DateClickArg) => {
     clickedDate = info.dateStr;
@@ -48,6 +48,7 @@ export const Calendar = () => {
       const updatedEvents = currentEvents.filter(event => event.id !== deleteEvent);
       setCurrentEvents(updatedEvents);
     }
+    
     setShowDeleteWarning(false);
     setDeleteEvent('');
   };

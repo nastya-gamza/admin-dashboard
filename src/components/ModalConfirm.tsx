@@ -23,14 +23,14 @@ const ModalConfirm = ({ isOpen, setIsOpen, proceed, text }: ModalConfirmProps) =
   };
 
   return (
-    <dialog ref={modalRef} onClick={() => setIsOpen(false)}>
+    <dialog ref={modalRef} onClick={handleClose}>
       <div
         onClick={e => e.stopPropagation()}
-        className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-3 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg md:w-full text-left'>
-        <h3 className='text-lg font-semibold'>Are you absolutely sure?</h3>
+        className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-3 border bg-background dark:bg-boxdark dark:border-strokedark p-6 shadow-lg duration-200 sm:rounded-lg md:w-full text-left'>
+        <h3 className='text-lg font-semibold dark:text-white'>Are you absolutely sure?</h3>
         <p className='text-sm text-muted-foreground'>{text}</p>
         <div className='flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2'>
-          <Button onClick={() => handleClose()} className='bg-background border border-input'>
+          <Button onClick={() => handleClose()} className='bg-background border border-input dark:text-white'>
             Cancel
           </Button>
           <Button className='text-white' onClick={proceed}>

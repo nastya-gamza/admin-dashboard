@@ -1,17 +1,16 @@
+import { useEffect, useRef } from 'react';
 import { useForm, FieldErrors, Controller } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useAddCustomerMutation } from '@/redux';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '@/components/ui/label';
-import { useAddCustomerMutation } from '@/redux';
-import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Country, TCustomerSchema, customerSchema } from '@/lib/types';
-import { X } from 'lucide-react';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { useGetCountriesQuery } from '@/redux/countriesApi';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { useThemeContext } from '@/context/theme/useThemeContext';
 
 export const AddCustomerForm = () => {
   const form = useForm<TCustomerSchema>({
@@ -40,10 +39,6 @@ export const AddCustomerForm = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  useClickOutside(formRef, () => {
-    navigate('/customers');
-  });
-
   const { data } = useGetCountriesQuery('');
 
   interface CountryOption {
@@ -68,9 +63,8 @@ export const AddCustomerForm = () => {
       callback(filterCountries(inputValue));
     }
   };
-
-  const themeColor = JSON.parse(localStorage.getItem('theme') as string);
-  const selectBackgroundColor = themeColor === 'dark' ? '#1A222C' : '#fff';
+  const { theme: themeColor } = useThemeContext();
+  const selectBackgroundColor = themeColor === 'dark' ? '#1A222C' : '#F1F5F9';
   const selectBorderColor = themeColor === 'dark' ? '#1A222C' : 'rgb(226, 232, 240)';
   const selectTextColor = themeColor === 'dark' ? '#fff' : 'rgb(33, 43, 54)';
 
@@ -80,45 +74,46 @@ export const AddCustomerForm = () => {
         <form
           ref={formRef}
           onSubmit={handleSubmit(onSubmit, onError)}
-          className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-8 border dark:bg-boxdark p-6 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
+          className='bg-white  grid w-full max-w-2xl  gap-10 border dark:bg-boxdark p-8 pt-11 shadow-lg duration-200 sm:rounded-lg md:w-full'
           noValidate>
-          <button
-            onClick={() => navigate('/customers')}
-            type='button'
-            className='absolute right-3 top-3'>
-            <X size={20} />
-          </button>
-          <div className='relative grid grid-cols-5 items-center gap-2'>
+          <div className='relative grid grid-cols-6 items-center gap-2'>
             <Label htmlFor='name' className='text-center'>
               Name <span className='text-danger'>*</span>
             </Label>
-            <Input id='name' className='col-span-4' {...register('name')} />
-            <p className='absolute -bottom-5 left-1/2 translate-x-[-50%] text-xs text-danger text-center'>
-              {errors.name?.message}
-            </p>
+            <div className='relative col-span-5'>
+              <Input id='name' {...register('name')} />
+              <p className='absolute -bottom-5 left-1/2 translate-x-[-50%] text-xs text-danger text-center'>
+                {errors.name?.message}
+              </p>
+            </div>
           </div>
-          <div className='relative grid grid-cols-5 items-center gap-4'>
+          <div className='relative grid grid-cols-6 items-center gap-4'>
             <Label htmlFor='email' className='text-center'>
               Email <span className='text-danger'>*</span>
             </Label>
-            <Input type='email' id='email' className='col-span-4' {...register('email')} />
-            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
-              {errors.email?.message}
-            </p>
+            <div className='relative col-span-5'>
+              <Input type='email' id='email' {...register('email')} />
+              <p className='absolute -bottom-5 left-1/2 translate-x-[-50%] text-xs text-danger text-center'>
+                {errors.email?.message}
+              </p>
+            </div>
           </div>
-          <div className='relative grid grid-cols-5 items-center gap-4'>
+          <div className='relative grid grid-cols-6 items-center gap-4'>
             <Label htmlFor='phone' className='text-center'>
               Phone <span className='text-danger'>*</span>
             </Label>
-            <Input id='phone' className='col-span-4' {...register('phone')} />
-            <p className='absolute -bottom-5 -translate-x-[-50%] text-xs text-danger text-center'>
-              {errors.phone?.message}
-            </p>
+            <div className='relative col-span-5'>
+              <Input id='phone' {...register('phone')} />
+              <p className='absolute -bottom-5 left-1/2 translate-x-[-50%] text-xs text-danger text-center'>
+                {errors.phone?.message}
+              </p>
+            </div>
           </div>
-          <div className='relative grid grid-cols-5 items-center gap-4'>
+          <div className='relative grid grid-cols-6 items-center gap-4'>
             <Label className='text-center'>
               Location <span className='text-danger'>*</span>
             </Label>
+            <div className='relative col-span-5'>
             <Controller
               control={control}
               name='location'
@@ -158,7 +153,7 @@ export const AddCustomerForm = () => {
                       backgroundColor: selectBackgroundColor,
                     }),
                   }}
-                  className='col-span-4 h-10'
+                  className='h-10'
                   cacheOptions
                   onChange={selectedOption => onChange(selectedOption?.value || null)}
                   onBlur={onBlur}
@@ -168,9 +163,11 @@ export const AddCustomerForm = () => {
                 />
               )}
             />
-            <p className='absolute -bottom-5 right-1/2 -translate-x-[-50%] text-xs text-danger text-center'>
+            <p className='absolute -bottom-5 left-1/2 translate-x-[-50%] text-xs text-danger text-center'>
               {errors.location?.message}
             </p>
+
+            </div>
           </div>
           <Button disabled={!isDirty || isSubmitting} className='mt-4 text-white'>
             Add

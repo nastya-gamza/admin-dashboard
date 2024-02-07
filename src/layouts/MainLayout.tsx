@@ -9,7 +9,7 @@ export const MainLayout = () => {
   const [isOpen, setIsOpen] = useLocalStorage<boolean>('open', true);
 
   return (
-    <div className='flex dark:bg-boxdark-2 h-full'>
+    <div className='flex dark:bg-boxdark-2'>
       <Sidebar isOpen={isOpen} />
       <div
         className={`${
